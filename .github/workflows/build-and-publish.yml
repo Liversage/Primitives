@@ -13,7 +13,7 @@ jobs:
     runs-on: windows-latest
 
     env:
-      PACKAGE_PATH: ./Packages
+      PACKAGE_PATH: .\Packages
 
     steps:
       - name: Get source
@@ -33,4 +33,4 @@ jobs:
       - name: Pack
         run: dotnet pack --configuration Release --no-build --output ${{env.PACKAGE_PATH}}
       - name: Push to NuGet Gallery
-        run: dotnet nuget push ${{env.PACKAGE_PATH}}/*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push ${{env.PACKAGE_PATH}}\*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
