@@ -1,0 +1,20 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>8.0</LangVersion> 
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Authors>Martin Liversage</Authors>
+    <Description>Create primitives to combat primitive obsession.</Description>
+    <Copyright>© 2020 Martin Liversage</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Liversage/Primitives</PackageProjectUrl>
+    <PackageTags>CodeGen;CodeGeneration;Primitive;Primitives</PackageTags>
+    <Company>Liversage Consulting A/S</Company>
+    <Product>Liversage.Primtives</Product>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.2.31" />
+  </ItemGroup>
+</Project>

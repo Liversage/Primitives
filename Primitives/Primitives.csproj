@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Sdk Name="CodeGeneration.Roslyn.PluginMetapackage.Sdk" Version="0.7.63" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>Liversage.Primitives</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Models\Models.csproj" />
+    <NupkgAdditionalDependency Include="Liversage.Primitives.Generators" IncludeAssets="all" />
+  </ItemGroup>
+
+  <Target Name="PostPack" AfterTargets="Pack">
+    <Exec Command="..\nuget add $(PackageOutputPath)\$(PackageId).$(PackageVersion).nupkg -source ..\Samples\NuGetFeed" />
+  </Target>
+
+</Project>
