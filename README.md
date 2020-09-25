@@ -1,6 +1,6 @@
 # Combatting primitive obsession
 
-This library allows you to generate your own primitives with very little overhead. The code generation integrates with the build pipeline. You create a partial `struct`, decorate it with an attribute and the code generator takes care of the rest.
+This library allows you to generate your own primitives with very little overhead. The code generation integrates with the build pipeline. You create a `partial struct`, decorate it with an attribute and the code generator takes care of the rest.
 
 # Motivation and example
 
@@ -55,7 +55,7 @@ These primitives behave the same way as the built-in primtives of C# like `int`,
 
 # Usage
 
-Add a reference to `Liversage.Primitives` (this is a .NET Standard 2.0 NuGet package). Then create your primitive type (import the namespace with `using Liversage.Primitives`):
+Add a reference to [`Liversage.Primitives`](https://www.nuget.org/packages/Liversage.Primitives/) (this is a .NET Standard 2.0 NuGet package). Then create your primitive type as a `readonly partial struct` with a field:
 
 ```csharp
 [Primitive]
