@@ -10,15 +10,17 @@ namespace EntityFramework
 
         public DbSet<Customer> Customers { get; set; } = null!;
 
+        public DbSet<Order> Orders { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            // This ain't pretty...
+
             modelBuilder.Entity<Customer>(builder =>
             {
-                builder.HasKey(Customer.IdFieldName);
-                builder.Property(Customer.IdFieldName).ValueGeneratedOnAdd();
-                builder.Ignore(customer => customer.Id);
+                builder.UseFieldInsteadOfPropertyAsKey(Customer.IdFieldName, nameof(Customer.Id));
 
                 builder.Property(customer => customer.Category)
                     .HasConversion(category => category.ToString(), category => Category.FromString(category));
@@ -28,6 +30,21 @@ namespace EntityFramework
 
                 builder.Property(customer => customer.LastSeen)
                     .HasConversion(timestamp => timestamp.ToDateTimeOffset(), timestamp => Timestamp.FromDateTimeOffset(timestamp));
+
+                builder.HasMany(customer => customer.Orders)
+                    .WithOne()
+                    .HasForeignKey(Order.CustomerIdFieldName);
+            });
+
+            modelBuilder.Entity<Order>(builder =>
+            {
+                builder.UseFieldInsteadOfPropertyAsKey(Order.IdFieldName, nameof(Order.Id));
+
+                builder.UseFieldInsteadOfProperty(Order.CustomerIdFieldName, nameof(Order.CustomerId));
+
+                builder.HasOne(order => order.Customer!)
+                    .WithMany(customer => customer.Orders)
+                    .HasForeignKey(Order.CustomerIdFieldName);
             });
         }
     }

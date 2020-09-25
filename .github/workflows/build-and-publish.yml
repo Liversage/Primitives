@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - Samples/**
+        README.md
   pull_request:
     branches:
       - main
@@ -34,3 +37,4 @@ jobs:
         run: dotnet pack --configuration Release --no-build --output ${{env.PACKAGE_PATH}}
       - name: Push to NuGet Gallery
         run: dotnet nuget push ${{env.PACKAGE_PATH}}\*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        if: github.event_name == 'push'

@@ -23,11 +23,13 @@ namespace EntityFramework
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             await ExecuteScopeAsync(CreateDatabaseAsync);
-            var id = await ExecuteScopeAsync(context => CreateCustomerAsync(context, "Gold"));
+            var id = await ExecuteScopeAsync(context => CreateCustomerAsync(context, "Gold", "Alpha", "Beta"));
             await ExecuteScopeAsync(context => CreateCustomerAsync(context, "Silver"));
             await ExecuteScopeAsync(GetAllCustomersAsync);
             await ExecuteScopeAsync(context => GetCustomerByIdAsync(context, id));
             await ExecuteScopeAsync(context => GetCustomerByCategoryAsync(context, "Gold"));
+            await ExecuteScopeAsync(context => GetCustomerWithEagerLoadedOrdersAsync(context, id));
+            await ExecuteScopeAsync(context => GetCustomerWithExplicitlyLoadedOrdersAsync(context, id));
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
@@ -38,7 +40,7 @@ namespace EntityFramework
             await context.Database.EnsureCreatedAsync();
         }
 
-        async Task<CustomerId> CreateCustomerAsync(Context context, Category category)
+        async Task<CustomerId> CreateCustomerAsync(Context context, Category category, params string[] orderDescriptions)
         {
             var customer = new Customer
             {
@@ -48,6 +50,15 @@ namespace EntityFramework
             };
             context.Customers.Add(customer);
             logger.LogInformation("Creating customer: category = {Category}, reference = {Reference}, last seen = {LastSeen}", customer.Category, customer.Reference, customer.LastSeen);
+            foreach (var orderDescription in orderDescriptions)
+            {
+                var order = new Order
+                {
+                    Customer = customer,
+                    Description = orderDescription
+                };
+                context.Orders.Add(order);
+            }
             await context.SaveChangesAsync();
             return customer.Id;
         }
@@ -75,6 +86,27 @@ namespace EntityFramework
             var customers = await context.Customers.Where(customer => EF.Property<int>(customer, Customer.IdFieldName) == providerId).ToListAsync();
             foreach (var customer in customers)
                 logger.LogInformation("Customer: id = {Id}, category = {Category}, reference = {Reference}, last seen = {LastSeen}", customer.Id, customer.Category, customer.Reference, customer.LastSeen);
+        }
+
+        async Task GetCustomerWithEagerLoadedOrdersAsync(Context context, CustomerId id)
+        {
+            logger.LogInformation("Retrieving customer with id {CustomerId} and related orders eagerly", id);
+            var providerId = id.ToInt32();
+            var customer = await context.Customers.Include(customer => customer.Orders).Where(customer => EF.Property<int>(customer, Customer.IdFieldName) == providerId).FirstAsync();
+            logger.LogInformation("Customer: id = {Id}, category = {Category}, reference = {Reference}, last seen = {LastSeen}", customer.Id, customer.Category, customer.Reference, customer.LastSeen);
+            foreach (var order in customer.Orders!)
+                logger.LogInformation("Order: id = {Id}, description = {Description}", order.Id, order.Description);
+        }
+
+        async Task GetCustomerWithExplicitlyLoadedOrdersAsync(Context context, CustomerId id)
+        {
+            logger.LogInformation("Retrieving customer with id {CustomerId} and related orders explicitly", id);
+            var providerId = id.ToInt32();
+            var customer = await context.Customers.Where(customer => EF.Property<int>(customer, Customer.IdFieldName) == providerId).FirstAsync();
+            logger.LogInformation("Customer: id = {Id}, category = {Category}, reference = {Reference}, last seen = {LastSeen}", customer.Id, customer.Category, customer.Reference, customer.LastSeen);
+            await context.Entry(customer).Collection(customer => customer.Orders).LoadAsync();
+            foreach (var order in customer.Orders!)
+                logger.LogInformation("Order: id = {Id}, description = {Description}", order.Id, order.Description);
         }
 
         async Task ExecuteScopeAsync(Func<Context, Task> action)
