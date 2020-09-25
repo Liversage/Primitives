@@ -1,4 +1,6 @@
-﻿namespace EntityFramework
+﻿using System.Collections.Generic;
+
+namespace EntityFramework
 {
     public class Customer
     {
@@ -15,5 +17,6 @@
         public Category Category { get; set; }
         public ExternalReference Reference { get; set; }
         public Timestamp LastSeen { get; set; }
+        public List<Order>? Orders { get; set; }
     }
 }
