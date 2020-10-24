@@ -210,6 +210,7 @@ namespace Samples
             var currency1 = Currency.FromString("eur");
             var currency2 = Currency.FromString("EUR");
             Console.WriteLine($"{currency1} == {currency2}: {currency1 == currency2}");
+            Console.WriteLine($"{currency1.GetHashCode()} == {currency2.GetHashCode()}: {currency1.GetHashCode() == currency2.GetHashCode()}");
 
             Console.WriteLine();
         }

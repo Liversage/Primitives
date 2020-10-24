@@ -193,7 +193,7 @@ namespace Liversage.Primitives.Generators
                 if (!descriptor.Flags.HasFlag(PrimitiveDescriptorFlags.InnerIsString))
                     yield return descriptor.GetHashCodeSyntax();
                 else
-                    yield return descriptor.StringGetHashCodeSyntax();
+                    yield return descriptor.StringGetHashCodeSyntax(stringComparison);
                 yield return descriptor.OperatorEqualsSyntax();
                 yield return descriptor.OperatorNotEqualsSyntax();
             }

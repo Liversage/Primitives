@@ -7,12 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples", "Samples\Samples.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F244994C-5928-4E03-86B6-052CF0B766C2}"
 	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
 		nuget.config = nuget.config
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFramework", "EntityFramework\EntityFramework.csproj", "{4ECB4052-5916-46F9-840A-5A8D92AF7144}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityFramework", "EntityFramework\EntityFramework.csproj", "{4ECB4052-5916-46F9-840A-5A8D92AF7144}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemTextJson", "SystemTextJson\SystemTextJson.csproj", "{EC0F7082-AF38-4288-AB33-12AEFE208849}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemTextJson", "SystemTextJson\SystemTextJson.csproj", "{EC0F7082-AF38-4288-AB33-12AEFE208849}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
