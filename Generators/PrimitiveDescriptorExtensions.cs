@@ -178,7 +178,7 @@ namespace Liversage.Primitives.Generators
                                     IdentifierName(descriptor.Name),
                                     SingleVariableDesignation(Identifier("value")))),
                             InvocationExpression(IdentifierName("Equals"))
-                            .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(IdentifierName("value"))))))))
+                                .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(IdentifierName("value"))))))))
                 .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
 
         public static MemberDeclarationSyntax GetHashCodeSyntax(this PrimitiveDescriptor descriptor)
@@ -193,19 +193,28 @@ namespace Liversage.Primitives.Generators
                                 IdentifierName("GetHashCode")))))
                 .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
 
-        public static MemberDeclarationSyntax StringGetHashCodeSyntax(this PrimitiveDescriptor descriptor)
+        public static MemberDeclarationSyntax StringGetHashCodeSyntax(this PrimitiveDescriptor descriptor, StringComparison stringComparison)
             => MethodDeclaration(PredefinedType(Token(SyntaxKind.IntKeyword)), Identifier("GetHashCode"))
                 .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword)))
                 .WithExpressionBody(
                     ArrowExpressionClause(
-                        BinaryExpression(
-                            SyntaxKind.CoalesceExpression,
-                            ConditionalAccessExpression(
+                        ConditionalExpression(
+                            BinaryExpression(
+                                SyntaxKind.NotEqualsExpression,
                                 IdentifierName(descriptor.InnerName),
-                                InvocationExpression(MemberBindingExpression(IdentifierName("GetHashCode")))),
-                            LiteralExpression(
-                                SyntaxKind.NumericLiteralExpression,
-                                Literal(0)))))
+                                LiteralExpression(SyntaxKind.NullLiteralExpression)),
+                            InvocationExpression(
+                                MemberAccessExpression(
+                                    SyntaxKind.SimpleMemberAccessExpression,
+                                    MemberAccessExpression(
+                                        SyntaxKind.SimpleMemberAccessExpression,
+                                        IdentifierName("StringComparer"),
+                                        IdentifierName(stringComparison.ToString())),
+                                    IdentifierName("GetHashCode")))
+                                .WithArgumentList(
+                                    ArgumentList(
+                                        SingletonSeparatedList(Argument(IdentifierName(descriptor.InnerName))))),
+                            LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(0)))))
                 .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
 
         public static MemberDeclarationSyntax OperatorEqualsSyntax(this PrimitiveDescriptor descriptor)

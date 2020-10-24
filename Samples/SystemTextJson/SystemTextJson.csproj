@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Liversage.Primitives" Version="1.1.*-*" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.8" />
     <PackageReference Include="System.Text.Json" Version="4.7.2" />
   </ItemGroup>
