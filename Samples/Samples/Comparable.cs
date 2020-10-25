@@ -5,6 +5,6 @@ namespace Samples
     [Primitive(Features.Default | Features.Comparable)]
     public readonly partial struct Comparable
     {
-        readonly int value;
+        readonly int other;
     }
 }

@@ -272,7 +272,10 @@ namespace Liversage.Primitives.Generators
                         InvocationExpression(
                             MemberAccessExpression(
                                 SyntaxKind.SimpleMemberAccessExpression,
-                                IdentifierName("value"),
+                                MemberAccessExpression(
+                                    SyntaxKind.SimpleMemberAccessExpression,
+                                    ThisExpression(),
+                                    IdentifierName(descriptor.InnerName)),
                                 IdentifierName("CompareTo")))
                         .WithArgumentList(
                             ArgumentList(
@@ -281,7 +284,7 @@ namespace Liversage.Primitives.Generators
                                         MemberAccessExpression(
                                             SyntaxKind.SimpleMemberAccessExpression,
                                             IdentifierName("other"),
-                                            IdentifierName("value"))))))))
+                                            IdentifierName(descriptor.InnerName))))))))
                 .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
 
         public static MemberDeclarationSyntax StringIComparableTCompareToSyntax(this PrimitiveDescriptor descriptor, StringComparison stringComparison)
