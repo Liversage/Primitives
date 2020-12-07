@@ -6,5 +6,7 @@ namespace Samples
     public readonly partial struct Comparable
     {
         readonly int other;
+
+        public static readonly Comparable Zero = new Comparable(0);
     }
 }

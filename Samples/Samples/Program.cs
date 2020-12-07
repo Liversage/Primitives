@@ -63,10 +63,12 @@ namespace Samples
         {
             Console.WriteLine("Comparable");
             Console.WriteLine("==========");
+            
             var random = new Random();
-            var values = Enumerable.Range(0, 10).Select(_ => (Comparable) random.Next(100)).ToList();
+            var values = Enumerable.Range(0, 10).Select(_ => (Comparable) random.Next(-100, 100)).ToList();
 
             Console.WriteLine(string.Join(", ", values.OrderBy(comparable => comparable)));
+            Console.WriteLine(string.Join(", ", values.Select(comparable => $"{comparable} > 0 = {comparable > Comparable.Zero}")));
 
             Console.WriteLine();
         }

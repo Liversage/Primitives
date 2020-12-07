@@ -4,6 +4,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Liversage.Primitives" Version="1.1.10-*" />
+    <PackageReference Include="Liversage.Primitives" Version="1.1.11-*" />
   </ItemGroup>
 </Project>
