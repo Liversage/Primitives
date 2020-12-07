@@ -28,7 +28,7 @@ jobs:
         with:
           dotnet-version: 3.1.x
       - name: Set build version
-        uses: dotnet/nbgv@v0.4.0
+        uses: dotnet/nbgv@master
       - name: Install dependencies
         run: dotnet restore
       - name: Build
