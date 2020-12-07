@@ -24,11 +24,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v1.7.2
         with:
-          dotnet-version: 3.1.302
+          dotnet-version: 3.1.x
       - name: Set build version
-        uses: dotnet/nbgv@v0.3.1
+        uses: dotnet/nbgv@v0.4.0
       - name: Install dependencies
         run: dotnet restore
       - name: Build
