@@ -39,7 +39,7 @@ namespace Liversage.Primitives.Generators
                             .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(IdentifierName(descriptor.InnerName)))))))
                 .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
 
-        public static MemberDeclarationSyntax ImplictCastFromPrimitiveSyntax(this PrimitiveDescriptor descriptor)
+        public static MemberDeclarationSyntax ImplicitCastFromPrimitiveSyntax(this PrimitiveDescriptor descriptor)
             => ConversionOperatorDeclaration(Token(SyntaxKind.ImplicitKeyword), IdentifierName(descriptor.Name))
                 .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword)))
                 .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(descriptor.InnerName).WithType(descriptor.InnerType))))
@@ -577,7 +577,7 @@ namespace Liversage.Primitives.Generators
 
         public static MemberDeclarationSyntax DateTimeTryParseSyntax(this PrimitiveDescriptor descriptor, string stylesTypeName, TypeSyntax inputType)
             => MethodDeclaration(PredefinedType(Token(SyntaxKind.BoolKeyword)), Identifier("TryParse"))
-                .WithModifiers(TokenList(new[] { Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword) }))
+                .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword)))
                 .WithParameterList(
                     ParameterList(
                         SeparatedList<ParameterSyntax>(
@@ -642,7 +642,7 @@ namespace Liversage.Primitives.Generators
 
         static MemberDeclarationSyntax NumberTryParseSyntax(this PrimitiveDescriptor descriptor, TypeSyntax inputType)
             => MethodDeclaration(PredefinedType(Token(SyntaxKind.BoolKeyword)), Identifier("TryParse"))
-                .WithModifiers(TokenList(new[] { Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword) }))
+                .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword)))
                 .WithParameterList(
                     ParameterList(
                         SeparatedList<ParameterSyntax>(

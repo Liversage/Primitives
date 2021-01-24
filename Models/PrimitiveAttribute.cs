@@ -14,5 +14,7 @@ namespace Liversage.Primitives
         public Features Features { get; }
 
         public StringComparison StringComparison { get; set; } = StringComparison.Ordinal;
+
+        public bool MarkAsNonUserCode { get; set; } = true;
     }
 }

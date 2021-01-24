@@ -6,7 +6,7 @@
   <PropertyGroup>
     <Authors>Martin Liversage</Authors>
     <Description>Create primitives to combat primitive obsession.</Description>
-    <Copyright>© 2020 Martin Liversage</Copyright>
+    <Copyright>© 2021 Martin Liversage</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Liversage/Primitives</PackageProjectUrl>
     <PackageTags>CodeGen;CodeGeneration;Primitive;Primitives</PackageTags>
