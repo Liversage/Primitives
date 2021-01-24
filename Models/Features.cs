@@ -32,12 +32,12 @@ namespace Liversage.Primitives
         /// <summary>
         ///    Implements TryParse() methods by delegating to the inner type.
         /// </summary>
-        Parsable = Formattable << 1,
+        Parseable = Formattable << 1,
 
         /// <summary>
         ///   Implements IConvertible by delegating to the inner type.
         /// </summary>
-        Convertible = Parsable << 1,
+        Convertible = Parseable << 1,
 
         Default = Equatable
     }

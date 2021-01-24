@@ -68,7 +68,7 @@ namespace Liversage.Primitives.Generators
             bool HasConstructor() => typeDeclaration.Members.OfType<ConstructorDeclarationSyntax>().Any();
 
             bool HasToString() => typeDeclaration.Members.OfType<MethodDeclarationSyntax>().Any(
-                method => method.Identifier.ToString() == nameof(object.ToString)
+                method => method.Identifier.ToString() == nameof(ToString)
                     && method.Modifiers.Any(modifier => modifier.Kind() == SyntaxKind.OverrideKeyword));
 
             string GetInnerTypeName()

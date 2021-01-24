@@ -113,9 +113,9 @@ namespace Samples
             Console.WriteLine("Parsable");
             Console.WriteLine("==========");
 
-            var parsable1 = new Parsable(-1163220307);
+            var parsable1 = new Parseable(-1163220307);
             var @string = parsable1.ToString("X8", CultureInfo.InvariantCulture);
-            var result = Parsable.TryParse(@string, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var parsable2);
+            var result = Parseable.TryParse(@string, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var parsable2);
             Console.WriteLine($"'{@string}': {result} => {parsable2}");
 
             Console.WriteLine();

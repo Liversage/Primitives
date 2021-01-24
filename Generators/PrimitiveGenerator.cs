@@ -14,6 +14,7 @@ namespace Liversage.Primitives.Generators
 {
     public class PrimitiveGenerator : IRichCodeGenerator
     {
+        readonly bool markAsNonUserCode;
         readonly StringComparison stringComparison;
         Features features;
 
@@ -24,6 +25,7 @@ namespace Liversage.Primitives.Generators
 
             features = GetFeatures();
             stringComparison = (StringComparison?) GetNamedArgument<int>(nameof(PrimitiveAttribute.StringComparison)) ?? StringComparison.Ordinal;
+            markAsNonUserCode = GetNamedArgument<bool>(nameof(PrimitiveAttribute.MarkAsNonUserCode)) ?? true;
 
             Features GetFeatures()
             {
@@ -59,7 +61,9 @@ namespace Liversage.Primitives.Generators
             var usings = new List<UsingDirectiveSyntax>();
             if (context.CompilationUnitUsings.All(syntax => syntax.Name.ToString() != "System"))
                 usings.Add(UsingDirective(ParseName("System")));
-            if (features.HasFlag(Features.Parsable) && context.CompilationUnitUsings.All(syntax => syntax.Name.ToString() != "System.Globalization"))
+            if (markAsNonUserCode)
+                usings.Add(UsingDirective(ParseName("System.Diagnostics")));
+            if (features.HasFlag(Features.Parseable) && context.CompilationUnitUsings.All(syntax => syntax.Name.ToString() != "System.Globalization"))
                 usings.Add(UsingDirective(ParseName("System.Globalization")));
             if (usings.Count > 0)
                 result.Usings = new SyntaxList<UsingDirectiveSyntax>(usings);
@@ -93,10 +97,10 @@ namespace Liversage.Primitives.Generators
                 features &= ~Features.Comparable;
             }
 
-            if (features.HasFlag(Features.Parsable) && (descriptor.InnerKnownType == KnownType.Unknown || descriptor.InnerKnownType == KnownType.String))
+            if (features.HasFlag(Features.Parseable) && (descriptor.InnerKnownType == KnownType.Unknown || descriptor.InnerKnownType == KnownType.String))
             {
-                progress.Report(Diagnostic.Create(Diagnostics.FieldIsNotParsable, location));
-                features &= ~Features.Parsable;
+                progress.Report(Diagnostic.Create(Diagnostics.FieldIsNotParseable, location));
+                features &= ~Features.Parseable;
             }
 
             return Task.FromResult(SingletonList((MemberDeclarationSyntax) StructSyntax(descriptor)));
@@ -106,7 +110,12 @@ namespace Liversage.Primitives.Generators
         {
             var @struct = StructDeclaration(descriptor.Name)
                 .WithModifiers(
-                        TokenList(new[] { Token(SyntaxKind.ReadOnlyKeyword), Token(SyntaxKind.PartialKeyword) }));
+                        TokenList(Token(SyntaxKind.ReadOnlyKeyword), Token(SyntaxKind.PartialKeyword)));
+
+            if (markAsNonUserCode)
+                @struct = @struct
+                    .WithAttributeLists(
+                        SingletonList(AttributeList(SingletonSeparatedList(Attribute(IdentifierName("DebuggerNonUserCode"))))));
 
             var baseTypes = GetBaseTypes(descriptor).ToList();
             if (baseTypes.Count >= 1)
@@ -164,7 +173,7 @@ namespace Liversage.Primitives.Generators
                 yield return descriptor.ConstructorSyntax();
 
             yield return descriptor.FromPrimitiveSyntax();
-            yield return descriptor.ImplictCastFromPrimitiveSyntax();
+            yield return descriptor.ImplicitCastFromPrimitiveSyntax();
             if (!descriptor.Flags.HasFlag(PrimitiveDescriptorFlags.InnerIsString))
             {
                 yield return descriptor.ToPrimitiveSyntax();
@@ -214,7 +223,7 @@ namespace Liversage.Primitives.Generators
             if (features.HasFlag(Features.Formattable))
                 yield return descriptor.IFormattableToStringSyntax();
 
-            if (features.HasFlag(Features.Parsable))
+            if (features.HasFlag(Features.Parseable))
             {
                 switch (descriptor.InnerKnownType)
                 {
