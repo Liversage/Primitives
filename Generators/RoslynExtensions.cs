@@ -10,12 +10,15 @@ namespace Liversage.Primitives.Generators
     {
         public static PrimitiveDescriptor? ToPrimitiveDescriptor(this TypeDeclarationSyntax typeDeclaration, SemanticModel semanticModel, IProgress<Diagnostic> progress)
         {
-            if (typeDeclaration.Members.OfType<FieldDeclarationSyntax>().Count(field => !field.Modifiers.Any(SyntaxKind.StaticKeyword)) != 1)
+            static bool FieldPredicate(FieldDeclarationSyntax field) =>
+                !field.Modifiers.Any(SyntaxKind.StaticKeyword) && !field.Modifiers.Any(SyntaxKind.ConstKeyword);
+
+            if (typeDeclaration.Members.OfType<FieldDeclarationSyntax>().Count(FieldPredicate) != 1)
             {
                 progress.Report(Diagnostic.Create(Diagnostics.NotExactlyOneField, typeDeclaration.GetLocation(), typeDeclaration.Identifier.ToString()));
                 return null;
             }
-            var innerField = typeDeclaration.Members.OfType<FieldDeclarationSyntax>().First(field => !field.Modifiers.Any(SyntaxKind.StaticKeyword)).Declaration;
+            var innerField = typeDeclaration.Members.OfType<FieldDeclarationSyntax>().First(FieldPredicate).Declaration;
 
             if (innerField.Variables.Count != 1)
             {
