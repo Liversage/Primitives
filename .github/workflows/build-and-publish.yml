@@ -13,10 +13,11 @@ on:
 
 jobs:
   build-and-publish:
-    runs-on: ubuntu-latest
+    # Use Windows to avoid CR LF problems in tests.
+    runs-on: windows-latest
 
     env:
-      PACKAGE_PATH: ./packages
+      PACKAGE_PATH: .\Packages
 
     steps:
       - name: Get source
