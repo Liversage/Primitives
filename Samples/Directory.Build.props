@@ -1,9 +1,0 @@
-<Project>
-  <PropertyGroup>
-    <LangVersion>8.0</LangVersion> 
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Liversage.Primitives" Version="2.1.*-*" />
-  </ItemGroup>
-</Project>

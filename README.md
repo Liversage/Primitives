@@ -55,7 +55,7 @@ These primitives behave the same way as the built-in primtives of C# like `int`,
 
 # Usage
 
-Add a reference to [`Liversage.Primitives`](https://www.nuget.org/packages/Liversage.Primitives/) (this is a .NET Standard 2.0 NuGet package). Then create your primitive type as a `readonly partial struct` with a field:
+Add a reference to [`Liversage.Primitives`](https://www.nuget.org/packages/Liversage.Primitives/) (this is a [.NET source generator](https://docs.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/source-generators-overview) &mdash; they were introduced in .NET 5.0). Then create your primitive type as a `readonly partial struct` with a field:
 
 ```csharp
 [Primitive]
@@ -65,7 +65,7 @@ readonly partial struct OrderId
 }
 ```
 
-Adding the `[Primitive]` attribute generates a source file in the `obj` folder of your project. Normally you should not care about this file that is automatically included in your build but to better understand the code generated it's instructive to look at it:
+Adding the `[Primitive]` attribute generates a source file that becomes part of the project. Normally you should not care about this file that is automatically included in your build but to better understand the code generated it's instructive to look at it:
 
 ```csharp
 readonly partial struct OrderId : IEquatable<OrderId>
@@ -114,7 +114,7 @@ readonly partial struct OrderId
 }
 ```
 
-The code generator will update the generated methods to match the new type of the field. Instead of an integral type like `int` or `long` you can use `string`:
+The code generator will update the generated methods to match the new type of the field. Instead of a value type like `int` or `long` you can use `string`:
 
 ```csharp
 [Primitive]
@@ -247,7 +247,7 @@ readonly partial struct Currency
 
     public override string ToString() => currency.ToUpperInvariant();
 
-    public static bool IsValid(string currency) => currency?.Length == 3 && currency.All(char.IsLetter);
+    public static bool IsValid(string currency) => currency?.Length is 3 && currency.All(char.IsLetter);
 }
 ```
 
@@ -263,16 +263,12 @@ Notice that a `struct` always has a default constructor that will initialize the
 
 A lot of processing in software systems happens at the edge where domain types are serialized to formats like JSON or storage like a relational database. JSON serializers and OR frameworks understand types like `int` and `string` but don't understand the primitive `OrderId`. If you are using DTOs at the edge you will often use an object mapper to convert between domain models and DTOs and chances are that this mapper doesn't understand primitives like `OrderId`.
 
-Fortunately many serializers, OR frameworks and object mappers are extensible and allow custom converters to be used but unfortunately you will have to create these converters yourself. One might argue that since this library already uses code generation it should also code generate relevant converters. This is true but the scope of doing this is very wide and is not include (yet?). In the samples there are some examples that demonstrates how to integrate with Entity Framework Core and `System.Text.Json`.
+Fortunately many serializers, OR frameworks and object mappers are extensible and allow custom converters to be used but unfortunately you will have to create these converters yourself. One might argue that since this library already uses code generation it should also code generate relevant converters. This is true but the scope of doing this is very wide and is not included (yet?).
 
 # Limitations
 
-The code generator has certain expectations about the `struct` that `[Primitive]` is attached to. If these expectations are not upheld it will provide some diagnostic output describing the problem or in many cases just crash. Either way you get compiler warnings or errors but the errors with long stack traces are not so easy to understand compared to the diagnostics messages so there is room for improvement.
-
-# C# 9 source generators
-
-The soon to be released (at this time of writing) C# 9 source generators will provide a language integrated way to generate code. However, this package is built without preview software and instead generates code with the `CodeGeneration.Roslyn` package that today provides features similar to C# 9 source generators.
+The code generator has certain expectations about the `struct` that `[Primitive]` is attached to. If these expectations are not met it will provide some diagnostic output describing the problem or perhaps in some cases just crash. Either way you get compiler warnings or errors but the errors with long stack traces are not so easy to understand compared to the diagnostics messages so there might be room for improvement.
 
 # Acknowledgements
 
-This project would not be possible without [`CodeGeneration.Roslyn`](https://github.com/aarnott/CodeGeneration.Roslyn).
+This project was created before .NET source generators were available and initially used [`CodeGeneration.Roslyn`](https://github.com/aarnott/CodeGeneration.Roslyn) to perform the code generation.

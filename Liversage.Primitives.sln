@@ -1,20 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30320.27
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{81C509DC-BB1B-45CF-894B-B175C2A8CA42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Primitives", "Primitives\Primitives.csproj", "{CCFD5DED-3675-4B1F-BECC-961E2F7F56A6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E62E8F7-CA6C-4A12-BFE4-C90673A3B423}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Primitives.Tests", "Primitives.Tests\Primitives.Tests.csproj", "{0852BD24-1582-4D5A-A46C-D16ECDE3B3E1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples", "Samples\Samples.csproj", "{4ECFCD2A-5BE1-44C5-9F83-71B803FD71E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5C6E4056-60F9-4CD7-BC45-ACBCD298F6DC}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
+		LICENSE = LICENSE
+		Liversage.Primitives.sln.DotSettings = Liversage.Primitives.sln.DotSettings
+		nuget.config = nuget.config
+		README.md = README.md
 		version.json = version.json
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generators", "Generators\Generators.csproj", "{7A270226-C11D-4B40-84DD-E74BF6A9DB34}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Primitives", "Primitives\Primitives.csproj", "{2838A7C3-76A8-41DE-9085-5EE50AE9E02A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,23 +27,23 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{81C509DC-BB1B-45CF-894B-B175C2A8CA42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{81C509DC-BB1B-45CF-894B-B175C2A8CA42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{81C509DC-BB1B-45CF-894B-B175C2A8CA42}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{81C509DC-BB1B-45CF-894B-B175C2A8CA42}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7A270226-C11D-4B40-84DD-E74BF6A9DB34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A270226-C11D-4B40-84DD-E74BF6A9DB34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A270226-C11D-4B40-84DD-E74BF6A9DB34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7A270226-C11D-4B40-84DD-E74BF6A9DB34}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2838A7C3-76A8-41DE-9085-5EE50AE9E02A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2838A7C3-76A8-41DE-9085-5EE50AE9E02A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2838A7C3-76A8-41DE-9085-5EE50AE9E02A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2838A7C3-76A8-41DE-9085-5EE50AE9E02A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCFD5DED-3675-4B1F-BECC-961E2F7F56A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCFD5DED-3675-4B1F-BECC-961E2F7F56A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCFD5DED-3675-4B1F-BECC-961E2F7F56A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCFD5DED-3675-4B1F-BECC-961E2F7F56A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0852BD24-1582-4D5A-A46C-D16ECDE3B3E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0852BD24-1582-4D5A-A46C-D16ECDE3B3E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0852BD24-1582-4D5A-A46C-D16ECDE3B3E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0852BD24-1582-4D5A-A46C-D16ECDE3B3E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4ECFCD2A-5BE1-44C5-9F83-71B803FD71E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4ECFCD2A-5BE1-44C5-9F83-71B803FD71E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4ECFCD2A-5BE1-44C5-9F83-71B803FD71E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4ECFCD2A-5BE1-44C5-9F83-71B803FD71E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {808F0427-7101-4256-A298-701ED9EF88E4}
+		SolutionGuid = {E21E302E-9AEF-40F2-A3D5-300E90E86A6B}
 	EndGlobalSection
 EndGlobal
