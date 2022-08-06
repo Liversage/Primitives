@@ -1,4 +1,6 @@
-[*.cs]
+[*]
+
+max_line_length = 160
 
 # https://editorconfig.org/#supported-properties
 
@@ -7,81 +9,180 @@ indent_size = 4
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-# https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-language-conventions
+[*.cs]
 
+# https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/
+
+# IDE0003 Remove this or Me qualification
+# IDE0009 Add this or Me qualification
 dotnet_style_qualification_for_field = false:suggestion
 dotnet_style_qualification_for_property = false:suggestion
 dotnet_style_qualification_for_method = false:suggestion
 dotnet_style_qualification_for_event = false:suggestion
 
-dotnet_style_predefined_type_for_locals_parameters_members = true:suggestion
-dotnet_style_predefined_type_for_member_access = true:suggestion
+# IDE0007 Use var instead of explicit type
+# IDE0008 Use explicit type instead of var
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = true:suggestion
 
+# IDE0011 Add braces
+csharp_prefer_braces = false:suggestion
+
+# IDE0016 Use throw expression
+csharp_style_throw_expression = true:suggestion
+
+# IDE0017 Use object initializers
+dotnet_style_object_initializer = true:suggestion
+
+# IDE0018 Inline variable declaration
+csharp_style_inlined_variable_declaration = true:suggestion
+
+# IDE0019 Use pattern matching to avoid as followed by a null check
+csharp_style_pattern_matching_over_as_with_null_check = true:suggestion
+
+# IDE0020 Use pattern matching to avoid is check followed by a cast (with variable)
+# IDE0038 Use pattern matching to avoid is check followed by a cast (without variable)
+csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
+
+# IDE0021 Use expression body for constructors
+csharp_style_expression_bodied_constructors = true:suggestion
+
+# IDE0022 Use expression body for methods
+csharp_style_expression_bodied_methods = true:suggestion
+
+# IDE0023 Use expression body for conversion operators
+# IDE0024 Use expression body for operators
+csharp_style_expression_bodied_operators = true:suggestion
+
+# IDE0025 Use expression body for properties
+csharp_style_expression_bodied_properties = true:suggestion
+
+# IDE0026 Use expression body for indexers
+csharp_style_expression_bodied_indexers = true:suggestion
+
+# IDE0027 Use expression body for accessors
+csharp_style_expression_bodied_accessors = true:suggestion
+
+# IDE0028 Use collection initializers
+dotnet_style_collection_initializer = true:suggestion
+
+# IDE0029 Use coalesce expression (non-nullable types)
+# IDE0030 Use coalesce expression (nullable types)
+dotnet_style_coalesce_expression = true:suggestion
+
+# IDE0031 Use null propagation
+dotnet_style_null_propagation = true:suggestion
+
+# IDE0032 Use auto property
+dotnet_style_prefer_auto_properties = true:suggestion
+
+# IDE0033 Use explicitly provided tuple name
+dotnet_style_explicit_tuple_names = true:suggestion
+
+# IDE0034 Simplify default expression
+csharp_prefer_simple_default_expression = true:suggestion
+
+# IDE0036 Order modifiers
+csharp_preferred_modifier_order = public, private, protected, internal, static, extern, new, virtual, abstract, sealed, override, readonly, unsafe, volatile, async:suggestion
+
+# IDE0037 Use inferred member name
+dotnet_style_prefer_inferred_tuple_names = true:suggestion
+dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
+
+# IDE0039 Use local function instead of lambda
+csharp_style_pattern_local_over_anonymous_function = true:suggestion
+
+# IDE0040 Add accessibility modifiers
 dotnet_style_require_accessibility_modifiers = omit_if_default:suggestion
+
+# IDE0041 Use is null check
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
+
+# IDE0042 Deconstruct variable declaration
+csharp_style_deconstructed_variable_declaration = true:suggestion
+
+# IDE0044 Add readonly modifier
 dotnet_style_readonly_field = true:suggestion
 
+# IDE0045 Use conditional expression for assignment
+dotnet_style_prefer_conditional_expression_over_assignment = true:suggestion
+
+# IDE0046 Use conditional expression for return
+dotnet_style_prefer_conditional_expression_over_return = true:suggestion
+
+# IDE0047 Remove unnecessary parentheses
+# IDE0048 Add parentheses for clarity
 dotnet_style_parentheses_in_arithmetic_binary_operators = never_if_unnecessary:suggestion
 dotnet_style_parentheses_in_relational_binary_operators = never_if_unnecessary:suggestion
 dotnet_style_parentheses_in_other_binary_operators = never_if_unnecessary:suggestion
 dotnet_style_parentheses_in_other_operators = never_if_unnecessary:suggestion
 
-dotnet_style_object_initializer = true:suggestion
-dotnet_style_collection_initializer = true:suggestion
-dotnet_style_explicit_tuple_names = true:suggestion
-dotnet_style_prefer_inferred_tuple_names = true:suggestion
-dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
-dotnet_style_prefer_auto_properties = true:suggestion
-dotnet_style_prefer_conditional_expression_over_assignment = true:silent
-dotnet_style_prefer_conditional_expression_over_return = true:silent
+# IDE0049 Use language keywords instead of framework type names for type references
+dotnet_style_predefined_type_for_locals_parameters_members = true:suggestion
+dotnet_style_predefined_type_for_member_access = true:suggestion
+
+# IDE0053 Use expression body for lambdas
+csharp_style_expression_bodied_lambdas = true:suggestion
+
+# IDE0054 Use compound assignment
+# IDE0074 Use coalesce compound assignment
 dotnet_style_prefer_compound_assignment = true:suggestion
 
-dotnet_style_coalesce_expression = true:suggestion
-dotnet_style_null_propagation = true:suggestion
-dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
-
-dotnet_code_quality_unused_parameters = all:suggestion
-
-csharp_style_var_for_built_in_types = true:suggestion
-csharp_style_var_when_type_is_apparent = true:suggestion
-csharp_style_var_elsewhere = true:suggestion
-
-csharp_style_expression_bodied_methods = true:suggestion
-csharp_style_expression_bodied_constructors = true:suggestion
-csharp_style_expression_bodied_operators = true:suggestion
-csharp_style_expression_bodied_properties = true:suggestion
-csharp_style_expression_bodied_indexers = true:suggestion
-csharp_style_expression_bodied_accessors = true:suggestion
-csharp_style_expression_bodied_lambdas = true:silent
-csharp_style_expression_bodied_local_functions = true:suggestion
-
-csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
-csharp_style_pattern_matching_over_as_with_null_check = true:suggestion
-csharp_style_inlined_variable_declaration = true:suggestion
-
-csharp_prefer_simple_default_expression = true:suggestion
-
-csharp_style_throw_expression = true:suggestion
-csharp_style_conditional_delegate_call = true:suggestion
-
-csharp_preferred_modifier_order = public, private, protected, internal, static, extern, new, virtual, abstract, sealed, override, readonly, unsafe, volatile, async:silent
-
-csharp_prefer_braces = false:suggestion
-
-csharp_style_unused_value_expression_statement_preference = discard_variable:silent
-csharp_style_unused_value_assignment_preference = discard_variable:suggestion
-
+# IDE0056 Use index operator
 csharp_style_prefer_index_operator = true:suggestion
+
+# IDE0057 Use range operator
 csharp_style_prefer_range_operator = true:suggestion
 
-csharp_style_deconstructed_variable_declaration = true:suggestion
-csharp_style_pattern_local_over_anonymous_function = true:suggestion
-csharp_using_directive_placement = outside_namespace:suggestion
+# IDE0058 Remove unused expression value
+csharp_style_unused_value_expression_statement_preference = discard_variable:silent
+
+# IDE0059 Remove unnecessary value assignment
+csharp_style_unused_value_assignment_preference = discard_variable:suggestion
+
+# IDE0060 Remove unused parameter
+dotnet_code_quality_unused_parameters = all:suggestion
+
+# IDE0061 Use expression body for local functions
+csharp_style_expression_bodied_local_functions = true:suggestion
+
+# IDE0062 Make local function static
 csharp_prefer_static_local_function = true:suggestion
+
+# IDE0063 Use simple using statement
 csharp_prefer_simple_using_statement = true:suggestion
+
+# IDE0065 using directive placement
+csharp_using_directive_placement = outside_namespace:suggestion
+
+# IDE0066 Use switch expression
 csharp_style_prefer_switch_expression = true:suggestion
 
-# https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-formatting-conventions
+# IDE0071 Simplify interpolation
+dotnet_style_prefer_simplified_interpolation = true:suggestion
 
+# IDE0075 Simplify conditional expression
+dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
+
+# IDE0078 Use pattern matching
+csharp_style_prefer_pattern_matching = true:suggestion
+
+# IDE0079 Remove unnecessary suppression
+dotnet_remove_unnecessary_suppression_exclusions = true:suggestion
+
+# IDE0083 Use pattern matching (not operator)
+csharp_style_prefer_not_pattern = true:suggestion
+
+# IDE0090 Simplify new expression
+csharp_style_implicit_object_creation_when_type_is_apparent = true:suggestion
+
+# IDE1005 Use conditional delegate call
+csharp_style_conditional_delegate_call = true:suggestion
+
+# https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/formatting-rules
+
+# IDE0055 Fix formatting
 dotnet_sort_system_directives_first = false
 dotnet_separate_import_directive_groups = false
 
@@ -102,6 +203,7 @@ csharp_indent_case_contents_when_block = false
 
 csharp_space_after_cast = true
 csharp_space_after_keywords_in_control_flow_statements = true
+csharp_space_between_parentheses = false
 csharp_space_before_colon_in_inheritance_clause = true
 csharp_space_after_colon_in_inheritance_clause = true
 csharp_space_around_binary_operators = ignore
@@ -125,9 +227,22 @@ csharp_space_between_square_brackets = false
 csharp_preserve_single_line_statements = false
 csharp_preserve_single_line_blocks = true
 
-csharp_using_directive_placement = outside_namespace
-
 # https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-naming-conventions
+
+dotnet_naming_style.camel_case.capitalization = camel_case
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_rule.private_fields_must_be_camel_case.symbols = private_fields
+dotnet_naming_rule.private_fields_must_be_camel_case.style = camel_case
+dotnet_naming_rule.private_fields_must_be_camel_case.severity = suggestion
+
+dotnet_naming_symbols.public_fields.applicable_kinds = field
+dotnet_naming_symbols.public_fields.applicable_accessibilities = public
+dotnet_naming_rule.public_fields_must_be_pascal_case.symbols = public_fields
+dotnet_naming_rule.public_fields_must_be_pascal_case.style = pascal_case
+dotnet_naming_rule.public_fields_must_be_pascal_case.severity = suggestion
 
 # https://docs.microsoft.com/en-us/visualstudio/code-quality/code-analysis-warnings-for-managed-code-by-checkid
 
@@ -168,7 +283,7 @@ dotnet_diagnostic.CA1019.severity = warning
 dotnet_diagnostic.CA1021.severity = warning
 
 # CA1024: Use properties where appropriate
-dotnet_diagnostic.CA1024.severity = warning
+dotnet_diagnostic.CA1024.severity = silent
 
 # CA1027: Mark enums with FlagsAttribute
 dotnet_diagnostic.CA1027.severity = warning
@@ -234,10 +349,10 @@ dotnet_diagnostic.CA1060.severity = warning
 dotnet_diagnostic.CA1061.severity = warning
 
 # CA1062: Validate arguments of public methods
-dotnet_diagnostic.CA1062.severity = warning
+dotnet_diagnostic.CA1062.severity = silent
 
 # CA1063: Implement IDisposable Correctly
-dotnet_diagnostic.CA1063.severity = warning
+dotnet_diagnostic.CA1063.severity = suggestion
 
 # CA1064: Exceptions should be public
 dotnet_diagnostic.CA1064.severity = warning
@@ -312,7 +427,7 @@ dotnet_diagnostic.CA1708.severity = warning
 dotnet_diagnostic.CA1710.severity = warning
 
 # CA1711: Identifiers should not have incorrect suffix
-dotnet_diagnostic.CA1711.severity = warning
+dotnet_diagnostic.CA1711.severity = silent
 
 # CA1712: Do not prefix enum values with type name
 dotnet_diagnostic.CA1712.severity = warning
@@ -321,7 +436,7 @@ dotnet_diagnostic.CA1712.severity = warning
 dotnet_diagnostic.CA1714.severity = warning
 
 # CA1715: Identifiers should have correct prefix
-dotnet_diagnostic.CA1715.severity = warning
+dotnet_diagnostic.CA1715.severity = silent
 
 # CA1716: Identifiers should not match keywords
 dotnet_diagnostic.CA1716.severity = silent
@@ -333,10 +448,10 @@ dotnet_diagnostic.CA1717.severity = warning
 dotnet_diagnostic.CA1720.severity = silent
 
 # CA1721: Property names should not match get methods
-dotnet_diagnostic.CA1721.severity = warning
+dotnet_diagnostic.CA1721.severity = silent
 
 # CA1724: Type names should not match namespaces
-dotnet_diagnostic.CA1724.severity = warning
+dotnet_diagnostic.CA1724.severity = silent
 
 # CA1725: Parameter names should match base declaration
 dotnet_diagnostic.CA1725.severity = warning
@@ -354,13 +469,13 @@ dotnet_diagnostic.CA1806.severity = warning
 dotnet_diagnostic.CA1810.severity = warning
 
 # CA1812: Avoid uninstantiated internal classes
-dotnet_diagnostic.CA1812.severity = warning
+dotnet_diagnostic.CA1812.severity = silent
 
 # CA1813: Avoid unsealed attributes
 dotnet_diagnostic.CA1813.severity = warning
 
 # CA1814: Prefer jagged arrays over multidimensional
-dotnet_diagnostic.CA1814.severity = warning
+dotnet_diagnostic.CA1814.severity = suggestion
 
 # CA1815: Override equals and operator equals on value types
 dotnet_diagnostic.CA1815.severity = warning
@@ -486,7 +601,7 @@ dotnet_diagnostic.CA2225.severity = warning
 dotnet_diagnostic.CA2226.severity = warning
 
 # CA2227: Collection properties should be read only
-dotnet_diagnostic.CA2227.severity = warning
+dotnet_diagnostic.CA2227.severity = silent
 
 # CA2229: Implement serialization constructors
 dotnet_diagnostic.CA2229.severity = warning
@@ -704,7 +819,7 @@ dotnet_diagnostic.CA5383.severity = warning
 # CA5384: Do Not Use Digital Signature Algorithm (DSA)
 dotnet_diagnostic.CA5384.severity = warning
 
-# CA5385: Use Rivest–Shamir–Adleman (RSA) Algorithm With Sufficient Key Size
+# CA5385: Use Rivestâ€“Shamirâ€“Adleman (RSA) Algorithm With Sufficient Key Size
 dotnet_diagnostic.CA5385.severity = warning
 
 # CA5386: Avoid hardcoding SecurityProtocolType value
@@ -755,7 +870,7 @@ dotnet_diagnostic.CA5400.severity = warning
 # CA5401: Do not use CreateEncryptor with non-default IV
 dotnet_diagnostic.CA5401.severity = warning
 
-# CA5402: Use CreateEncryptor with the default IV 
+# CA5402: Use CreateEncryptor with the default IV
 dotnet_diagnostic.CA5402.severity = warning
 
 # CA5403: Do not hard-code certificate
@@ -763,3 +878,6 @@ dotnet_diagnostic.CA5403.severity = warning
 
 # CA9999: Analyzer version mismatch
 dotnet_diagnostic.CA9999.severity = warning
+
+# CS8509: The switch expression does not handle all possible values of its input type (it is not exhaustive).
+dotnet_diagnostic.CS8509.severity = suggestion

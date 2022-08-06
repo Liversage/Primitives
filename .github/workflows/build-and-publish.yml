@@ -13,6 +13,7 @@ on:
 
 jobs:
   build-and-publish:
+    # Use Windows to avoid CR LF problems in tests.
     runs-on: windows-latest
 
     env:
@@ -20,21 +21,21 @@ jobs:
 
     steps:
       - name: Get source
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1.7.2
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 5.0.x
+          dotnet-version: 6.0.x
       - name: Set build version
         uses: dotnet/nbgv@master
       - name: Install dependencies
         run: dotnet restore
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
+      - name: Build and test
+        run: dotnet test --configuration Release --no-restore
       - name: Pack
         run: dotnet pack --configuration Release --no-build --output ${{env.PACKAGE_PATH}}
       - name: Push to NuGet Gallery
-        run: dotnet nuget push ${{env.PACKAGE_PATH}}\*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push ${{env.PACKAGE_PATH}}/*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
         if: github.event_name == 'push'
