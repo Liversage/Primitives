@@ -2,26 +2,36 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
+using System.Collections.Immutable;
 using System.Linq;
+using System.Threading;
 
 namespace Liversage.Primitives;
 
 static class RoslynExtensions
 {
-    public static PrimitiveDescriptor? ToPrimitiveDescriptor(this StructDeclarationSyntax @struct, SemanticModel semanticModel, string attributeName,
-        IProgress<Diagnostic> progress)
+    public static PrimitiveDescriptor? ToPrimitiveDescriptor(this StructDeclarationSyntax @struct, SemanticModel semanticModel, INamedTypeSymbol attributeType,
+        IProgress<Diagnostic> progress, CancellationToken cancellationToken)
     {
-        var symbol = semanticModel.GetDeclaredSymbol(@struct);
-        var attributes = symbol?.GetAttributes();
-        var attribute = attributes?.FirstOrDefault(data => data.AttributeClass?.ToString() == attributeName);
+        var symbol = semanticModel.GetDeclaredSymbol(@struct, cancellationToken);
+        if (symbol is null)
+            return null;
+
+        var attribute = FirstOrDefaultNoAllocation(
+            symbol.GetAttributes(),
+            attributeType,
+            (attributeData, type) => SymbolEqualityComparer.Default.Equals(attributeData.AttributeClass, type));
         if (attribute is null)
             return null;
+
         var features = GetFeatures();
         if (!features.HasValue)
             return null;
+
         var stringComparison = GetStringComparison();
         if (!stringComparison.HasValue)
             return null;
+
         var markAsNonUserCode = GetMarkAsNonUserCode();
         if (!markAsNonUserCode.HasValue)
             return null;
@@ -34,14 +44,14 @@ static class RoslynExtensions
         }
         var innerField = @struct.Members.OfType<FieldDeclarationSyntax>().First(FieldPredicate).Declaration;
 
-        if (innerField.Variables.Count != 1)
+        if (innerField.Variables.Count is not 1)
         {
             progress.Report(
                 Diagnostic.Create(Diagnostics.NotExactlyOneField, innerField.GetLocation(), @struct.Identifier.ToString()));
             return null;
         }
 
-        var innerTypeSymbol = (INamedTypeSymbol) semanticModel.GetSymbolInfo(innerField.Type).Symbol!;
+        var innerTypeSymbol = (INamedTypeSymbol) semanticModel.GetSymbolInfo(innerField.Type, cancellationToken).Symbol!;
         var innerTypeName = GetInnerTypeName();
         var innerKnownType = GetKnownType();
 
@@ -69,7 +79,7 @@ static class RoslynExtensions
             features.Value,
             stringComparison.Value,
             markAsNonUserCode.Value,
-            symbol!.ContainingNamespace.ToDisplayString(),
+            symbol.ContainingNamespace.ToDisplayString(),
             @struct.Identifier.WithoutTrivia(),
             innerField.Variables[0].Identifier,
             innerField.Type,
@@ -111,9 +121,6 @@ static class RoslynExtensions
             return null;
         }
 
-        static bool FieldPredicate(FieldDeclarationSyntax field) =>
-            !field.Modifiers.Any(SyntaxKind.StaticKeyword) && !field.Modifiers.Any(SyntaxKind.ConstKeyword);
-
         string GetInnerTypeName() =>
             innerTypeSymbol.IsTupleType ? "Tuple" : innerTypeSymbol.Name + string.Concat(innerTypeSymbol.TypeArguments.Select(t => t.Name));
 
@@ -121,7 +128,7 @@ static class RoslynExtensions
         {
             var typeSymbol = innerTypeSymbol;
             if (innerField.Type is NullableTypeSyntax nullableType &&
-                semanticModel.GetSymbolInfo(nullableType.ElementType).Symbol is INamedTypeSymbol nonNullableTypeSymbol)
+                semanticModel.GetSymbolInfo(nullableType.ElementType, cancellationToken).Symbol is INamedTypeSymbol nonNullableTypeSymbol)
                 typeSymbol = nonNullableTypeSymbol;
 
             return innerTypeSymbol.SpecialType switch
@@ -165,6 +172,17 @@ static class RoslynExtensions
             method => method.Identifier.ToString() == nameof(ToString)
                       && method.Modifiers.Any(modifier => modifier.IsKind(SyntaxKind.OverrideKeyword)));
 
-        bool IsInGlobalNamespace() => symbol!.ContainingNamespace.IsGlobalNamespace;
+        bool IsInGlobalNamespace() => symbol.ContainingNamespace.IsGlobalNamespace;
     }
+
+    static TElement? FirstOrDefaultNoAllocation<TElement, TContext>(ImmutableArray<TElement> source, TContext context, Func<TElement, TContext, bool> predicate)
+        where TElement : class
+    {
+        foreach (var element in source)
+            if (predicate(element, context))
+                return element;
+        return default;
+    }
+
+    static bool FieldPredicate(FieldDeclarationSyntax field) => !field.Modifiers.Any(SyntaxKind.StaticKeyword) && !field.Modifiers.Any(SyntaxKind.ConstKeyword);
 }

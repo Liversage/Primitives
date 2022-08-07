@@ -28,9 +28,9 @@ public readonly partial struct B { readonly int value; }";
         Assert.Equal(generator, generatorResult.Generator);
         Assert.True(generatorResult.Diagnostics.IsEmpty);
         Assert.Null(generatorResult.Exception);
-        Assert.Equal(3, generatorResult.GeneratedSources.Length);
-        var generatedSourceA = generatorResult.GeneratedSources[1];
-        var generatedSourceB = generatorResult.GeneratedSources[2];
+        Assert.Equal(2, generatorResult.GeneratedSources.Length);
+        var generatedSourceA = generatorResult.GeneratedSources[0];
+        var generatedSourceB = generatorResult.GeneratedSources[1];
         Assert.Equal("A.g.cs", generatedSourceA.HintName);
         Assert.Equal("B.g.cs", generatedSourceB.HintName);
     }

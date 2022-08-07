@@ -17,6 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Primitives\Primitives.csproj" />
+        <ProjectReference Include="..\Generators\Generators.csproj" />
     </ItemGroup>
 </Project>
