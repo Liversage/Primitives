@@ -236,8 +236,8 @@ readonly partial struct InGlobalNamespace : IEquatable<InGlobalNamespace>
         Assert.Equal(generator, generatorResult.Generator);
         Assert.True(generatorResult.Diagnostics.IsEmpty);
         Assert.Null(generatorResult.Exception);
-        Assert.Equal(2, generatorResult.GeneratedSources.Length);
-        var generatedSource = generatorResult.GeneratedSources[1];
+        Assert.Single(generatorResult.GeneratedSources);
+        var generatedSource = generatorResult.GeneratedSources[0];
         Assert.Equal(expectedGeneratedFileName, generatedSource.HintName);
         var generatedSourceText = generatedSource.SourceText.ToString();
         Assert.Equal(expectedGeneratedSource, generatedSourceText);

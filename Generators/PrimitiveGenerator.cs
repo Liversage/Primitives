@@ -12,72 +12,7 @@ namespace Liversage.Primitives;
 [Generator]
 public class PrimitiveGenerator : ISourceGenerator
 {
-    public void Initialize(GeneratorInitializationContext context)
-    {
-        // Notice: The definition of Features enum in the following source code
-        // should exactly match the definition in this project. The source code
-        // isn't generated from reflection to avoid the complexity of getting
-        // the XML comments.
-        const string source = @"using System;
-using System.Diagnostics;
-
-namespace Liversage.Primitives;
-
-[Flags]
-public enum Features
-{
-    /// <summary>
-    ///   Implements constructor, ToString() method and conversions to and
-    ///   from the inner type.
-    /// </summary>
-    None,
-
-    /// <summary>
-    ///   Implements IEquatable&lt;T&gt; using the == operator for the inner
-    ///   type and overrides Equals() and GetHashCode() and implements ==
-    ///   and != operators. 
-    /// </summary>
-    Equatable,
-
-    /// <summary>
-    ///   Implements IComparable&lt;T&gt; delegating to the inner type and
-    ///   implements &lt;, &lt;=, &gt; and &gt;= operators.
-    /// </summary>
-    Comparable = Equatable << 1,
-
-    /// <summary>
-    ///   Implements IFormattable by delegating to the inner type.
-    /// </summary>
-    Formattable = Comparable << 1,
-
-    /// <summary>
-    ///    Implements TryParse() methods by delegating to the inner type.
-    /// </summary>
-    Parseable = Formattable << 1,
-
-    /// <summary>
-    ///   Implements IConvertible by delegating to the inner type.
-    /// </summary>
-    Convertible = Parseable << 1,
-
-    Default = Equatable
-}
-
-[AttributeUsage(AttributeTargets.Struct)]
-[Conditional(""CodeGeneration"")]
-public sealed class PrimitiveAttribute : Attribute
-{
-    public PrimitiveAttribute(Features features = Features.Default) => Features = features;
-
-    public Features Features { get; }
-
-    public StringComparison StringComparison { get; set; } = StringComparison.Ordinal;
-
-    public bool MarkAsNonUserCode { get; set; } = true;
-}";
-        context.RegisterForPostInitialization(postInitializationContext => postInitializationContext.AddSource("PrimitiveAttribute.g.cs", source));
-        context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
-    }
+    public void Initialize(GeneratorInitializationContext context) => context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
 
     public void Execute(GeneratorExecutionContext context)
     {
@@ -86,14 +21,21 @@ public sealed class PrimitiveAttribute : Attribute
 
         var progress = new Progress(context);
 
-        const string attributeName = "Liversage.Primitives.PrimitiveAttribute";
-        var descriptors = syntaxReceiver.Structs.Select(GetDescriptor).Where(descriptor => descriptor is not null);
+        var attributeType = context.Compilation.GetTypeByMetadataName(typeof(PrimitiveAttribute).FullName);
+        if (attributeType is null)
+            return;
 
-        foreach (var descriptor in descriptors)
+        foreach (var @struct in syntaxReceiver.Structs)
         {
-            var structSyntax = StructSyntax(descriptor!);
+            context.CancellationToken.ThrowIfCancellationRequested();
+
+            var descriptor = GetDescriptor(@struct);
+            if (descriptor is null)
+                continue;
+
+            var structSyntax = StructSyntax(descriptor);
             var members =
-                !descriptor!.Flags.HasFlag(PrimitiveDescriptorFlags.IsInGlobalNamespace)
+                !descriptor.Flags.HasFlag(PrimitiveDescriptorFlags.IsInGlobalNamespace)
                     ? (MemberDeclarationSyntax) FileScopedNamespaceDeclaration(ParseName(descriptor.NamespaceName))
                         .WithMembers(new SyntaxList<MemberDeclarationSyntax>(structSyntax))
                     : structSyntax;
@@ -108,7 +50,7 @@ public sealed class PrimitiveAttribute : Attribute
         PrimitiveDescriptor? GetDescriptor(StructDeclarationSyntax @struct)
         {
             var semanticModel = context.Compilation.GetSemanticModel(@struct.SyntaxTree);
-            var descriptor = @struct.ToPrimitiveDescriptor(semanticModel, attributeName, progress);
+            var descriptor = @struct.ToPrimitiveDescriptor(semanticModel, attributeType, progress, context.CancellationToken);
             if (descriptor is null)
                 return null;
             if (descriptor.Features.HasFlag(Features.Comparable) && !descriptor.Flags.HasFlag(PrimitiveDescriptorFlags.InnerIsComparable))
