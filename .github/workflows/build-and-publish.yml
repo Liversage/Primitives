@@ -35,7 +35,7 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Test
-        run: dotnet test --configuration Release --no-build --verbosity:diagnostic
+        run: dotnet test --configuration Release --no-build
       - name: Pack
         run: dotnet pack --configuration Release --no-build --output ${{env.PACKAGE_PATH}}
       - name: Push to NuGet Gallery
