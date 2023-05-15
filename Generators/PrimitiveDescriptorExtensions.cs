@@ -15,7 +15,7 @@ static class PrimitiveDescriptorExtensions
             .WithTypeArgumentList(TypeArgumentList(SingletonSeparatedList<TypeSyntax>(PredefinedType(Token(SyntaxKind.CharKeyword)))));
 
     public static bool IsInnerTypeNullableReferenceType(this PrimitiveDescriptor descriptor)
-        => descriptor.InnerType is NullableTypeSyntax && descriptor.InnerTypeSymbol.IsReferenceType;
+        => descriptor is { InnerType: NullableTypeSyntax, InnerTypeSymbol.IsReferenceType: true };
 
     public static MemberDeclarationSyntax ConstructorSyntax(this PrimitiveDescriptor descriptor)
         => ConstructorDeclaration(descriptor.Name)
@@ -342,7 +342,7 @@ static class PrimitiveDescriptorExtensions
                                         SingletonSeparatedList(
                                             Argument(
                                                 LiteralExpression(SyntaxKind.StringLiteralExpression,
-                                                    Literal($"Object must be of type {descriptor.Name}")))))))),
+                                                    Literal($"Object must be of type {descriptor.Name}.")))))))),
                     ReturnStatement(
                         InvocationExpression(
                                 MemberAccessExpression(
@@ -360,6 +360,65 @@ static class PrimitiveDescriptorExtensions
                                                 SyntaxKind.SimpleMemberAccessExpression,
                                                 IdentifierName("other"),
                                                 IdentifierName(descriptor.InnerName)))))))));
+
+    public static MemberDeclarationSyntax StringIComparableCompareToSyntax(this PrimitiveDescriptor descriptor)
+        => MethodDeclaration(PredefinedType(Token(SyntaxKind.IntKeyword)), Identifier("CompareTo"))
+            .WithExplicitInterfaceSpecifier(ExplicitInterfaceSpecifier(IdentifierName("IComparable")))
+            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(Identifier("obj"))
+                .WithType(descriptor.TryWrapInNullableTypeSyntax(PredefinedType(Token(SyntaxKind.ObjectKeyword)))))))
+            .WithBody(
+                Block(
+                    IfStatement(
+                        PrefixUnaryExpression(
+                            SyntaxKind.LogicalNotExpression,
+                            ParenthesizedExpression(
+                                IsPatternExpression(
+                                    IdentifierName("obj"),
+                                    DeclarationPattern(
+                                        IdentifierName(descriptor.Name),
+                                        SingleVariableDesignation(Identifier("other")))))),
+                        ThrowStatement(
+                            ObjectCreationExpression(IdentifierName("ArgumentException"))
+                                .WithArgumentList(
+                                    ArgumentList(
+                                        SingletonSeparatedList(
+                                            Argument(
+                                                LiteralExpression(SyntaxKind.StringLiteralExpression,
+                                                    Literal($"Object must be of type {descriptor.Name}.")))))))),
+                    IfStatement(
+                        InvocationExpression(
+                                IdentifierName("ReferenceEquals"))
+                            .WithArgumentList(
+                                ArgumentList(
+                                    SeparatedList<ArgumentSyntax>(
+                                        new SyntaxNodeOrToken[]
+                                        {
+                                            Argument(
+                                                MemberAccessExpression(
+                                                    SyntaxKind.SimpleMemberAccessExpression, ThisExpression(), IdentifierName(descriptor.InnerName))),
+                                            Token(SyntaxKind.CommaToken), Argument(
+                                                MemberAccessExpression(
+                                                    SyntaxKind.SimpleMemberAccessExpression, IdentifierName("other"), IdentifierName(descriptor.InnerName)))
+                                        }))),
+                        ReturnStatement(LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(0)))),
+                    ReturnStatement(
+                        BinaryExpression(
+                            SyntaxKind.CoalesceExpression,
+                            ConditionalAccessExpression(
+                                MemberAccessExpression(
+                                    SyntaxKind.SimpleMemberAccessExpression,
+                                    ThisExpression(),
+                                    IdentifierName(descriptor.InnerName)),
+                                InvocationExpression(MemberBindingExpression(IdentifierName("CompareTo")))
+                                    .WithArgumentList(
+                                        ArgumentList(
+                                            SingletonSeparatedList(
+                                                Argument(
+                                                    MemberAccessExpression(
+                                                        SyntaxKind.SimpleMemberAccessExpression,
+                                                        IdentifierName("other"),
+                                                        IdentifierName(descriptor.InnerName))))))),
+                            PrefixUnaryExpression(SyntaxKind.UnaryMinusExpression, LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(1)))))));
 
     public static MemberDeclarationSyntax OperatorLessThanSyntax(this PrimitiveDescriptor descriptor)
         => OperatorDeclaration(PredefinedType(Token(SyntaxKind.BoolKeyword)), Token(SyntaxKind.LessThanToken))
@@ -567,7 +626,7 @@ static class PrimitiveDescriptorExtensions
     public static MemberDeclarationSyntax TimeSpanTryParseSpanSyntax(this PrimitiveDescriptor descriptor)
         => descriptor.DateTimeTryParseSyntax("TimeSpanStyles", ReadOnlySpanChar);
 
-    public static MemberDeclarationSyntax DateTimeTryParseSyntax(this PrimitiveDescriptor descriptor, string stylesTypeName, TypeSyntax inputType)
+    static MemberDeclarationSyntax DateTimeTryParseSyntax(this PrimitiveDescriptor descriptor, string stylesTypeName, TypeSyntax inputType)
         => MethodDeclaration(PredefinedType(Token(SyntaxKind.BoolKeyword)), Identifier("TryParse"))
             .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword)))
             .WithParameterList(
