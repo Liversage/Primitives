@@ -20,7 +20,7 @@ static class PrimitiveDescriptorExtensions
     public static MemberDeclarationSyntax ConstructorSyntax(this PrimitiveDescriptor descriptor)
         => ConstructorDeclaration(descriptor.Name)
             .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)))
-            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(descriptor.InnerName).WithType(descriptor.InnerType))))
+            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(Identifier("value")).WithType(descriptor.InnerType))))
             .WithExpressionBody(
                 ArrowExpressionClause(
                     AssignmentExpression(
@@ -29,27 +29,27 @@ static class PrimitiveDescriptorExtensions
                             SyntaxKind.SimpleMemberAccessExpression,
                             ThisExpression(),
                             IdentifierName(descriptor.InnerName)),
-                        IdentifierName(descriptor.InnerName))))
+                        IdentifierName("value"))))
             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
 
     public static MemberDeclarationSyntax FromPrimitiveSyntax(this PrimitiveDescriptor descriptor)
         => MethodDeclaration(IdentifierName(descriptor.Name), Identifier("From" + descriptor.InnerTypeName))
             .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword)))
-            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(descriptor.InnerName).WithType(descriptor.InnerType))))
+            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(Identifier("value")).WithType(descriptor.InnerType))))
             .WithExpressionBody(
                 ArrowExpressionClause(
                     ObjectCreationExpression(IdentifierName(descriptor.Name))
-                        .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(IdentifierName(descriptor.InnerName)))))))
+                        .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(IdentifierName("value")))))))
             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
 
     public static MemberDeclarationSyntax ImplicitCastFromPrimitiveSyntax(this PrimitiveDescriptor descriptor)
         => ConversionOperatorDeclaration(Token(SyntaxKind.ImplicitKeyword), IdentifierName(descriptor.Name))
             .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword)))
-            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(descriptor.InnerName).WithType(descriptor.InnerType))))
+            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(Identifier("value")).WithType(descriptor.InnerType))))
             .WithExpressionBody(
                 ArrowExpressionClause(
                     InvocationExpression(IdentifierName("From" + descriptor.InnerTypeName))
-                        .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(IdentifierName(descriptor.InnerName)))))))
+                        .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(IdentifierName("value")))))))
             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
 
     public static MemberDeclarationSyntax ToPrimitiveSyntax(this PrimitiveDescriptor descriptor)
@@ -61,13 +61,13 @@ static class PrimitiveDescriptorExtensions
     public static MemberDeclarationSyntax ExplicitCastToPrimitiveSyntax(this PrimitiveDescriptor descriptor)
         => ConversionOperatorDeclaration(Token(SyntaxKind.ExplicitKeyword), descriptor.InnerType)
             .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword)))
-            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(descriptor.InnerName).WithType(IdentifierName(descriptor.Name)))))
+            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(Identifier("value")).WithType(IdentifierName(descriptor.Name)))))
             .WithExpressionBody(
                 ArrowExpressionClause(
                     InvocationExpression(
                         MemberAccessExpression(
                             SyntaxKind.SimpleMemberAccessExpression,
-                            IdentifierName(descriptor.InnerName),
+                            IdentifierName("value"),
                             IdentifierName("To" + descriptor.InnerTypeName)))))
             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
 

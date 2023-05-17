@@ -30,11 +30,11 @@ public class ValidStructTests : TestsBase
             [DebuggerNonUserCode]
             readonly partial struct BasedOnInt : IEquatable<BasedOnInt>
             {
-                public BasedOnInt(int id) => this.id = id;
-                public static BasedOnInt FromInt32(int id) => new BasedOnInt(id);
-                public static implicit operator BasedOnInt(int id) => FromInt32(id);
+                public BasedOnInt(int value) => this.id = value;
+                public static BasedOnInt FromInt32(int value) => new BasedOnInt(value);
+                public static implicit operator BasedOnInt(int value) => FromInt32(value);
                 public int ToInt32() => id;
-                public static explicit operator int (BasedOnInt id) => id.ToInt32();
+                public static explicit operator int (BasedOnInt value) => value.ToInt32();
                 public override string ToString() => id.ToString();
                 public bool Equals(BasedOnInt other) => this.id == other.id;
                 public override bool Equals(object obj) => obj is BasedOnInt value && Equals(value);
@@ -53,31 +53,31 @@ public class ValidStructTests : TestsBase
             namespace Generated;
 
             [Primitive]
-            public readonly partial struct BasedOnInt
+            public readonly partial struct BasedOnInt32
             {
                 readonly Int32 id;
             }
             """,
-            "BasedOnInt.g.cs",
+            "BasedOnInt32.g.cs",
             """
             using System;
             using System.Diagnostics;
 
             namespace Generated;
             [DebuggerNonUserCode]
-            readonly partial struct BasedOnInt : IEquatable<BasedOnInt>
+            readonly partial struct BasedOnInt32 : IEquatable<BasedOnInt32>
             {
-                public BasedOnInt(Int32 id) => this.id = id;
-                public static BasedOnInt FromInt32(Int32 id) => new BasedOnInt(id);
-                public static implicit operator BasedOnInt(Int32 id) => FromInt32(id);
+                public BasedOnInt32(Int32 value) => this.id = value;
+                public static BasedOnInt32 FromInt32(Int32 value) => new BasedOnInt32(value);
+                public static implicit operator BasedOnInt32(Int32 value) => FromInt32(value);
                 public Int32 ToInt32() => id;
-                public static explicit operator Int32(BasedOnInt id) => id.ToInt32();
+                public static explicit operator Int32(BasedOnInt32 value) => value.ToInt32();
                 public override string ToString() => id.ToString();
-                public bool Equals(BasedOnInt other) => this.id == other.id;
-                public override bool Equals(object obj) => obj is BasedOnInt value && Equals(value);
+                public bool Equals(BasedOnInt32 other) => this.id == other.id;
+                public override bool Equals(object obj) => obj is BasedOnInt32 value && Equals(value);
                 public override int GetHashCode() => id.GetHashCode();
-                public static bool operator ==(BasedOnInt value1, BasedOnInt value2) => value1.Equals(value2);
-                public static bool operator !=(BasedOnInt value1, BasedOnInt value2) => !(value1 == value2);
+                public static bool operator ==(BasedOnInt32 value1, BasedOnInt32 value2) => value1.Equals(value2);
+                public static bool operator !=(BasedOnInt32 value1, BasedOnInt32 value2) => !(value1 == value2);
             }
             """
         },
@@ -89,29 +89,29 @@ public class ValidStructTests : TestsBase
             namespace Generated;
 
             [Primitive(MarkAsNonUserCode = false)]
-            public readonly partial struct BasedOnInt
+            public readonly partial struct DontMarkAsNonUserCode
             {
                 readonly int id;
             }
             """,
-            "BasedOnInt.g.cs",
+            "DontMarkAsNonUserCode.g.cs",
             """
             using System;
 
             namespace Generated;
-            readonly partial struct BasedOnInt : IEquatable<BasedOnInt>
+            readonly partial struct DontMarkAsNonUserCode : IEquatable<DontMarkAsNonUserCode>
             {
-                public BasedOnInt(int id) => this.id = id;
-                public static BasedOnInt FromInt32(int id) => new BasedOnInt(id);
-                public static implicit operator BasedOnInt(int id) => FromInt32(id);
+                public DontMarkAsNonUserCode(int value) => this.id = value;
+                public static DontMarkAsNonUserCode FromInt32(int value) => new DontMarkAsNonUserCode(value);
+                public static implicit operator DontMarkAsNonUserCode(int value) => FromInt32(value);
                 public int ToInt32() => id;
-                public static explicit operator int (BasedOnInt id) => id.ToInt32();
+                public static explicit operator int (DontMarkAsNonUserCode value) => value.ToInt32();
                 public override string ToString() => id.ToString();
-                public bool Equals(BasedOnInt other) => this.id == other.id;
-                public override bool Equals(object obj) => obj is BasedOnInt value && Equals(value);
+                public bool Equals(DontMarkAsNonUserCode other) => this.id == other.id;
+                public override bool Equals(object obj) => obj is DontMarkAsNonUserCode value && Equals(value);
                 public override int GetHashCode() => id.GetHashCode();
-                public static bool operator ==(BasedOnInt value1, BasedOnInt value2) => value1.Equals(value2);
-                public static bool operator !=(BasedOnInt value1, BasedOnInt value2) => !(value1 == value2);
+                public static bool operator ==(DontMarkAsNonUserCode value1, DontMarkAsNonUserCode value2) => value1.Equals(value2);
+                public static bool operator !=(DontMarkAsNonUserCode value1, DontMarkAsNonUserCode value2) => !(value1 == value2);
             }
             """
         },
@@ -176,11 +176,11 @@ public class ValidStructTests : TestsBase
             [DebuggerNonUserCode]
             readonly partial struct BasedOnTimeSpan : IEquatable<BasedOnTimeSpan>, IFormattable
             {
-                public BasedOnTimeSpan(TimeSpan duration) => this.duration = duration;
-                public static BasedOnTimeSpan FromTimeSpan(TimeSpan duration) => new BasedOnTimeSpan(duration);
-                public static implicit operator BasedOnTimeSpan(TimeSpan duration) => FromTimeSpan(duration);
+                public BasedOnTimeSpan(TimeSpan value) => this.duration = value;
+                public static BasedOnTimeSpan FromTimeSpan(TimeSpan value) => new BasedOnTimeSpan(value);
+                public static implicit operator BasedOnTimeSpan(TimeSpan value) => FromTimeSpan(value);
                 public TimeSpan ToTimeSpan() => duration;
-                public static explicit operator TimeSpan(BasedOnTimeSpan duration) => duration.ToTimeSpan();
+                public static explicit operator TimeSpan(BasedOnTimeSpan value) => value.ToTimeSpan();
                 public override string ToString() => duration.ToString();
                 public bool Equals(BasedOnTimeSpan other) => this.duration == other.duration;
                 public override bool Equals(object obj) => obj is BasedOnTimeSpan value && Equals(value);
@@ -233,11 +233,11 @@ public class ValidStructTests : TestsBase
             [DebuggerNonUserCode]
             readonly partial struct InGlobalNamespace : IEquatable<InGlobalNamespace>
             {
-                public InGlobalNamespace(int id) => this.id = id;
-                public static InGlobalNamespace FromInt32(int id) => new InGlobalNamespace(id);
-                public static implicit operator InGlobalNamespace(int id) => FromInt32(id);
+                public InGlobalNamespace(int value) => this.id = value;
+                public static InGlobalNamespace FromInt32(int value) => new InGlobalNamespace(value);
+                public static implicit operator InGlobalNamespace(int value) => FromInt32(value);
                 public int ToInt32() => id;
-                public static explicit operator int (InGlobalNamespace id) => id.ToInt32();
+                public static explicit operator int (InGlobalNamespace value) => value.ToInt32();
                 public override string ToString() => id.ToString();
                 public bool Equals(InGlobalNamespace other) => this.id == other.id;
                 public override bool Equals(object obj) => obj is InGlobalNamespace value && Equals(value);
@@ -269,11 +269,11 @@ public class ValidStructTests : TestsBase
             [DebuggerNonUserCode]
             readonly partial struct Comparable : IEquatable<Comparable>, IComparable<Comparable>, IComparable
             {
-                public Comparable(int id) => this.id = id;
-                public static Comparable FromInt32(int id) => new Comparable(id);
-                public static implicit operator Comparable(int id) => FromInt32(id);
+                public Comparable(int value) => this.id = value;
+                public static Comparable FromInt32(int value) => new Comparable(value);
+                public static implicit operator Comparable(int value) => FromInt32(value);
                 public int ToInt32() => id;
-                public static explicit operator int (Comparable id) => id.ToInt32();
+                public static explicit operator int (Comparable value) => value.ToInt32();
                 public override string ToString() => id.ToString();
                 public bool Equals(Comparable other) => this.id == other.id;
                 public override bool Equals(object obj) => obj is Comparable value && Equals(value);
@@ -303,12 +303,12 @@ public class ValidStructTests : TestsBase
             namespace Generated;
 
             [Primitive(Features.Default | Features.Comparable)]
-            public readonly partial struct BasedOnNullableString
+            public readonly partial struct ComparableBasedOnNullableString
             {
                 readonly string? value;
             }
             """,
-            "BasedOnNullableString.g.cs",
+            "ComparableBasedOnNullableString.g.cs",
             """
             using System;
             using System.Diagnostics;
@@ -316,32 +316,32 @@ public class ValidStructTests : TestsBase
             namespace Generated;
             #nullable enable
             [DebuggerNonUserCode]
-            readonly partial struct BasedOnNullableString : IEquatable<BasedOnNullableString>, IComparable<BasedOnNullableString>, IComparable
+            readonly partial struct ComparableBasedOnNullableString : IEquatable<ComparableBasedOnNullableString>, IComparable<ComparableBasedOnNullableString>, IComparable
             {
-                public BasedOnNullableString(string? value) => this.value = value;
-                public static BasedOnNullableString FromString(string? value) => new BasedOnNullableString(value);
-                public static implicit operator BasedOnNullableString(string? value) => FromString(value);
-                public static explicit operator string? (BasedOnNullableString value) => value.value;
+                public ComparableBasedOnNullableString(string? value) => this.value = value;
+                public static ComparableBasedOnNullableString FromString(string? value) => new ComparableBasedOnNullableString(value);
+                public static implicit operator ComparableBasedOnNullableString(string? value) => FromString(value);
+                public static explicit operator string? (ComparableBasedOnNullableString value) => value.value;
                 public override string ToString() => value ?? string.Empty;
-                public bool Equals(BasedOnNullableString other) => string.Equals(this.value, other.value, StringComparison.Ordinal);
-                public override bool Equals(object? obj) => obj is BasedOnNullableString value && Equals(value);
+                public bool Equals(ComparableBasedOnNullableString other) => string.Equals(this.value, other.value, StringComparison.Ordinal);
+                public override bool Equals(object? obj) => obj is ComparableBasedOnNullableString value && Equals(value);
                 public override int GetHashCode() => value != null ? StringComparer.Ordinal.GetHashCode(value) : 0;
-                public static bool operator ==(BasedOnNullableString value1, BasedOnNullableString value2) => value1.Equals(value2);
-                public static bool operator !=(BasedOnNullableString value1, BasedOnNullableString value2) => !(value1 == value2);
-                public int CompareTo(BasedOnNullableString other) => string.Compare(this.value, other.value, StringComparison.Ordinal);
+                public static bool operator ==(ComparableBasedOnNullableString value1, ComparableBasedOnNullableString value2) => value1.Equals(value2);
+                public static bool operator !=(ComparableBasedOnNullableString value1, ComparableBasedOnNullableString value2) => !(value1 == value2);
+                public int CompareTo(ComparableBasedOnNullableString other) => string.Compare(this.value, other.value, StringComparison.Ordinal);
                 int IComparable.CompareTo(object? obj)
                 {
-                    if (!(obj is BasedOnNullableString other))
-                        throw new ArgumentException("Object must be of type BasedOnNullableString.");
+                    if (!(obj is ComparableBasedOnNullableString other))
+                        throw new ArgumentException("Object must be of type ComparableBasedOnNullableString.");
                     if (ReferenceEquals(this.value, other.value))
                         return 0;
                     return this.value?.CompareTo(other.value) ?? -1;
                 }
 
-                public static bool operator <(BasedOnNullableString value1, BasedOnNullableString value2) => value1.CompareTo(value2) < 0;
-                public static bool operator <=(BasedOnNullableString value1, BasedOnNullableString value2) => value1.CompareTo(value2) <= 0;
-                public static bool operator>(BasedOnNullableString value1, BasedOnNullableString value2) => !(value1 <= value2);
-                public static bool operator >=(BasedOnNullableString value1, BasedOnNullableString value2) => !(value1 < value2);
+                public static bool operator <(ComparableBasedOnNullableString value1, ComparableBasedOnNullableString value2) => value1.CompareTo(value2) < 0;
+                public static bool operator <=(ComparableBasedOnNullableString value1, ComparableBasedOnNullableString value2) => value1.CompareTo(value2) <= 0;
+                public static bool operator>(ComparableBasedOnNullableString value1, ComparableBasedOnNullableString value2) => !(value1 <= value2);
+                public static bool operator >=(ComparableBasedOnNullableString value1, ComparableBasedOnNullableString value2) => !(value1 < value2);
             }
             """
         },
@@ -353,44 +353,44 @@ public class ValidStructTests : TestsBase
             namespace Generated;
 
             [Primitive(Features.Default | Features.Comparable)]
-            public readonly partial struct BasedOnString
+            public readonly partial struct ComparableBasedOnString
             {
                 readonly string value;
             }
             """,
-            "BasedOnString.g.cs",
+            "ComparableBasedOnString.g.cs",
             """
             using System;
             using System.Diagnostics;
 
             namespace Generated;
             [DebuggerNonUserCode]
-            readonly partial struct BasedOnString : IEquatable<BasedOnString>, IComparable<BasedOnString>, IComparable
+            readonly partial struct ComparableBasedOnString : IEquatable<ComparableBasedOnString>, IComparable<ComparableBasedOnString>, IComparable
             {
-                public BasedOnString(string value) => this.value = value;
-                public static BasedOnString FromString(string value) => new BasedOnString(value);
-                public static implicit operator BasedOnString(string value) => FromString(value);
-                public static explicit operator string (BasedOnString value) => value.value;
+                public ComparableBasedOnString(string value) => this.value = value;
+                public static ComparableBasedOnString FromString(string value) => new ComparableBasedOnString(value);
+                public static implicit operator ComparableBasedOnString(string value) => FromString(value);
+                public static explicit operator string (ComparableBasedOnString value) => value.value;
                 public override string ToString() => value ?? string.Empty;
-                public bool Equals(BasedOnString other) => string.Equals(this.value, other.value, StringComparison.Ordinal);
-                public override bool Equals(object obj) => obj is BasedOnString value && Equals(value);
+                public bool Equals(ComparableBasedOnString other) => string.Equals(this.value, other.value, StringComparison.Ordinal);
+                public override bool Equals(object obj) => obj is ComparableBasedOnString value && Equals(value);
                 public override int GetHashCode() => value != null ? StringComparer.Ordinal.GetHashCode(value) : 0;
-                public static bool operator ==(BasedOnString value1, BasedOnString value2) => value1.Equals(value2);
-                public static bool operator !=(BasedOnString value1, BasedOnString value2) => !(value1 == value2);
-                public int CompareTo(BasedOnString other) => string.Compare(this.value, other.value, StringComparison.Ordinal);
+                public static bool operator ==(ComparableBasedOnString value1, ComparableBasedOnString value2) => value1.Equals(value2);
+                public static bool operator !=(ComparableBasedOnString value1, ComparableBasedOnString value2) => !(value1 == value2);
+                public int CompareTo(ComparableBasedOnString other) => string.Compare(this.value, other.value, StringComparison.Ordinal);
                 int IComparable.CompareTo(object obj)
                 {
-                    if (!(obj is BasedOnString other))
-                        throw new ArgumentException("Object must be of type BasedOnString.");
+                    if (!(obj is ComparableBasedOnString other))
+                        throw new ArgumentException("Object must be of type ComparableBasedOnString.");
                     if (ReferenceEquals(this.value, other.value))
                         return 0;
                     return this.value?.CompareTo(other.value) ?? -1;
                 }
 
-                public static bool operator <(BasedOnString value1, BasedOnString value2) => value1.CompareTo(value2) < 0;
-                public static bool operator <=(BasedOnString value1, BasedOnString value2) => value1.CompareTo(value2) <= 0;
-                public static bool operator>(BasedOnString value1, BasedOnString value2) => !(value1 <= value2);
-                public static bool operator >=(BasedOnString value1, BasedOnString value2) => !(value1 < value2);
+                public static bool operator <(ComparableBasedOnString value1, ComparableBasedOnString value2) => value1.CompareTo(value2) < 0;
+                public static bool operator <=(ComparableBasedOnString value1, ComparableBasedOnString value2) => value1.CompareTo(value2) <= 0;
+                public static bool operator>(ComparableBasedOnString value1, ComparableBasedOnString value2) => !(value1 <= value2);
+                public static bool operator >=(ComparableBasedOnString value1, ComparableBasedOnString value2) => !(value1 < value2);
             }
             """
         }
