@@ -27,7 +27,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 7.0.x
       - name: Set build version
         uses: dotnet/nbgv@master
       - name: Install dependencies
@@ -40,4 +40,3 @@ jobs:
         run: dotnet pack --configuration Release --no-build --output ${{env.PACKAGE_PATH}}
       - name: Push to NuGet Gallery
         run: dotnet nuget push ${{env.PACKAGE_PATH}}\*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
-        if: github.event_name == 'push'

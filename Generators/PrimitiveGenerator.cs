@@ -170,7 +170,9 @@ public class PrimitiveGenerator : ISourceGenerator
             yield return !descriptor.Flags.HasFlag(PrimitiveDescriptorFlags.InnerIsString)
                 ? descriptor.IComparableTCompareToSyntax()
                 : descriptor.StringIComparableTCompareToSyntax(descriptor.StringComparison);
-            yield return descriptor.IComparableCompareToSyntax();
+            yield return !descriptor.Flags.HasFlag(PrimitiveDescriptorFlags.InnerIsString)
+                ? descriptor.IComparableCompareToSyntax()
+                : descriptor.StringIComparableCompareToSyntax();
             yield return descriptor.OperatorLessThanSyntax();
             yield return descriptor.OperatorLessThanOrEqualSyntax();
             yield return descriptor.OperatorGreaterThanSyntax();

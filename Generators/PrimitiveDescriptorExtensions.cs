@@ -15,12 +15,12 @@ static class PrimitiveDescriptorExtensions
             .WithTypeArgumentList(TypeArgumentList(SingletonSeparatedList<TypeSyntax>(PredefinedType(Token(SyntaxKind.CharKeyword)))));
 
     public static bool IsInnerTypeNullableReferenceType(this PrimitiveDescriptor descriptor)
-        => descriptor.InnerType is NullableTypeSyntax && descriptor.InnerTypeSymbol.IsReferenceType;
+        => descriptor is { InnerType: NullableTypeSyntax, InnerTypeSymbol.IsReferenceType: true };
 
     public static MemberDeclarationSyntax ConstructorSyntax(this PrimitiveDescriptor descriptor)
         => ConstructorDeclaration(descriptor.Name)
             .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)))
-            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(descriptor.InnerName).WithType(descriptor.InnerType))))
+            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(Identifier("value")).WithType(descriptor.InnerType))))
             .WithExpressionBody(
                 ArrowExpressionClause(
                     AssignmentExpression(
@@ -29,27 +29,27 @@ static class PrimitiveDescriptorExtensions
                             SyntaxKind.SimpleMemberAccessExpression,
                             ThisExpression(),
                             IdentifierName(descriptor.InnerName)),
-                        IdentifierName(descriptor.InnerName))))
+                        IdentifierName("value"))))
             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
 
     public static MemberDeclarationSyntax FromPrimitiveSyntax(this PrimitiveDescriptor descriptor)
         => MethodDeclaration(IdentifierName(descriptor.Name), Identifier("From" + descriptor.InnerTypeName))
             .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword)))
-            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(descriptor.InnerName).WithType(descriptor.InnerType))))
+            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(Identifier("value")).WithType(descriptor.InnerType))))
             .WithExpressionBody(
                 ArrowExpressionClause(
                     ObjectCreationExpression(IdentifierName(descriptor.Name))
-                        .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(IdentifierName(descriptor.InnerName)))))))
+                        .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(IdentifierName("value")))))))
             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
 
     public static MemberDeclarationSyntax ImplicitCastFromPrimitiveSyntax(this PrimitiveDescriptor descriptor)
         => ConversionOperatorDeclaration(Token(SyntaxKind.ImplicitKeyword), IdentifierName(descriptor.Name))
             .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword)))
-            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(descriptor.InnerName).WithType(descriptor.InnerType))))
+            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(Identifier("value")).WithType(descriptor.InnerType))))
             .WithExpressionBody(
                 ArrowExpressionClause(
                     InvocationExpression(IdentifierName("From" + descriptor.InnerTypeName))
-                        .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(IdentifierName(descriptor.InnerName)))))))
+                        .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(IdentifierName("value")))))))
             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
 
     public static MemberDeclarationSyntax ToPrimitiveSyntax(this PrimitiveDescriptor descriptor)
@@ -61,13 +61,13 @@ static class PrimitiveDescriptorExtensions
     public static MemberDeclarationSyntax ExplicitCastToPrimitiveSyntax(this PrimitiveDescriptor descriptor)
         => ConversionOperatorDeclaration(Token(SyntaxKind.ExplicitKeyword), descriptor.InnerType)
             .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword)))
-            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(descriptor.InnerName).WithType(IdentifierName(descriptor.Name)))))
+            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(Identifier("value")).WithType(IdentifierName(descriptor.Name)))))
             .WithExpressionBody(
                 ArrowExpressionClause(
                     InvocationExpression(
                         MemberAccessExpression(
                             SyntaxKind.SimpleMemberAccessExpression,
-                            IdentifierName(descriptor.InnerName),
+                            IdentifierName("value"),
                             IdentifierName("To" + descriptor.InnerTypeName)))))
             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
 
@@ -342,7 +342,7 @@ static class PrimitiveDescriptorExtensions
                                         SingletonSeparatedList(
                                             Argument(
                                                 LiteralExpression(SyntaxKind.StringLiteralExpression,
-                                                    Literal($"Object must be of type {descriptor.Name}")))))))),
+                                                    Literal($"Object must be of type {descriptor.Name}.")))))))),
                     ReturnStatement(
                         InvocationExpression(
                                 MemberAccessExpression(
@@ -360,6 +360,65 @@ static class PrimitiveDescriptorExtensions
                                                 SyntaxKind.SimpleMemberAccessExpression,
                                                 IdentifierName("other"),
                                                 IdentifierName(descriptor.InnerName)))))))));
+
+    public static MemberDeclarationSyntax StringIComparableCompareToSyntax(this PrimitiveDescriptor descriptor)
+        => MethodDeclaration(PredefinedType(Token(SyntaxKind.IntKeyword)), Identifier("CompareTo"))
+            .WithExplicitInterfaceSpecifier(ExplicitInterfaceSpecifier(IdentifierName("IComparable")))
+            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(Identifier("obj"))
+                .WithType(descriptor.TryWrapInNullableTypeSyntax(PredefinedType(Token(SyntaxKind.ObjectKeyword)))))))
+            .WithBody(
+                Block(
+                    IfStatement(
+                        PrefixUnaryExpression(
+                            SyntaxKind.LogicalNotExpression,
+                            ParenthesizedExpression(
+                                IsPatternExpression(
+                                    IdentifierName("obj"),
+                                    DeclarationPattern(
+                                        IdentifierName(descriptor.Name),
+                                        SingleVariableDesignation(Identifier("other")))))),
+                        ThrowStatement(
+                            ObjectCreationExpression(IdentifierName("ArgumentException"))
+                                .WithArgumentList(
+                                    ArgumentList(
+                                        SingletonSeparatedList(
+                                            Argument(
+                                                LiteralExpression(SyntaxKind.StringLiteralExpression,
+                                                    Literal($"Object must be of type {descriptor.Name}.")))))))),
+                    IfStatement(
+                        InvocationExpression(
+                                IdentifierName("ReferenceEquals"))
+                            .WithArgumentList(
+                                ArgumentList(
+                                    SeparatedList<ArgumentSyntax>(
+                                        new SyntaxNodeOrToken[]
+                                        {
+                                            Argument(
+                                                MemberAccessExpression(
+                                                    SyntaxKind.SimpleMemberAccessExpression, ThisExpression(), IdentifierName(descriptor.InnerName))),
+                                            Token(SyntaxKind.CommaToken), Argument(
+                                                MemberAccessExpression(
+                                                    SyntaxKind.SimpleMemberAccessExpression, IdentifierName("other"), IdentifierName(descriptor.InnerName)))
+                                        }))),
+                        ReturnStatement(LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(0)))),
+                    ReturnStatement(
+                        BinaryExpression(
+                            SyntaxKind.CoalesceExpression,
+                            ConditionalAccessExpression(
+                                MemberAccessExpression(
+                                    SyntaxKind.SimpleMemberAccessExpression,
+                                    ThisExpression(),
+                                    IdentifierName(descriptor.InnerName)),
+                                InvocationExpression(MemberBindingExpression(IdentifierName("CompareTo")))
+                                    .WithArgumentList(
+                                        ArgumentList(
+                                            SingletonSeparatedList(
+                                                Argument(
+                                                    MemberAccessExpression(
+                                                        SyntaxKind.SimpleMemberAccessExpression,
+                                                        IdentifierName("other"),
+                                                        IdentifierName(descriptor.InnerName))))))),
+                            PrefixUnaryExpression(SyntaxKind.UnaryMinusExpression, LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(1)))))));
 
     public static MemberDeclarationSyntax OperatorLessThanSyntax(this PrimitiveDescriptor descriptor)
         => OperatorDeclaration(PredefinedType(Token(SyntaxKind.BoolKeyword)), Token(SyntaxKind.LessThanToken))
@@ -567,7 +626,7 @@ static class PrimitiveDescriptorExtensions
     public static MemberDeclarationSyntax TimeSpanTryParseSpanSyntax(this PrimitiveDescriptor descriptor)
         => descriptor.DateTimeTryParseSyntax("TimeSpanStyles", ReadOnlySpanChar);
 
-    public static MemberDeclarationSyntax DateTimeTryParseSyntax(this PrimitiveDescriptor descriptor, string stylesTypeName, TypeSyntax inputType)
+    static MemberDeclarationSyntax DateTimeTryParseSyntax(this PrimitiveDescriptor descriptor, string stylesTypeName, TypeSyntax inputType)
         => MethodDeclaration(PredefinedType(Token(SyntaxKind.BoolKeyword)), Identifier("TryParse"))
             .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword)))
             .WithParameterList(
