@@ -21,7 +21,7 @@ public class ValidStructTests : TestsBase
                 readonly int id;
             }
             """,
-            "BasedOnInt.g.cs",
+            "Generated.BasedOnInt.g.cs",
             """
             using System;
             using System.Diagnostics;
@@ -58,7 +58,7 @@ public class ValidStructTests : TestsBase
                 readonly Int32 id;
             }
             """,
-            "BasedOnInt32.g.cs",
+            "Generated.BasedOnInt32.g.cs",
             """
             using System;
             using System.Diagnostics;
@@ -94,7 +94,7 @@ public class ValidStructTests : TestsBase
                 readonly int id;
             }
             """,
-            "DontMarkAsNonUserCode.g.cs",
+            "Generated.DontMarkAsNonUserCode.g.cs",
             """
             using System;
 
@@ -128,7 +128,7 @@ public class ValidStructTests : TestsBase
                 readonly string? value;
             }
             """,
-            "BasedOnNullableString.g.cs",
+            "Generated.BasedOnNullableString.g.cs",
             """
             using System;
             using System.Diagnostics;
@@ -166,7 +166,7 @@ public class ValidStructTests : TestsBase
                 }
             }
             """,
-            "BasedOnTimeSpan.g.cs",
+            "Generated.BasedOnTimeSpan.g.cs",
             """
             using System;
             using System.Diagnostics;
@@ -260,7 +260,7 @@ public class ValidStructTests : TestsBase
                 readonly int id;
             }
             """,
-            "Comparable.g.cs",
+            "Generated.Comparable.g.cs",
             """
             using System;
             using System.Diagnostics;
@@ -308,7 +308,7 @@ public class ValidStructTests : TestsBase
                 readonly string? value;
             }
             """,
-            "ComparableBasedOnNullableString.g.cs",
+            "Generated.ComparableBasedOnNullableString.g.cs",
             """
             using System;
             using System.Diagnostics;
@@ -358,7 +358,7 @@ public class ValidStructTests : TestsBase
                 readonly string value;
             }
             """,
-            "ComparableBasedOnString.g.cs",
+            "Generated.ComparableBasedOnString.g.cs",
             """
             using System;
             using System.Diagnostics;

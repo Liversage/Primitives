@@ -44,7 +44,7 @@ public class PrimitiveGenerator : ISourceGenerator
                 .AddMembers(members)
                 .NormalizeWhitespace();
             var sourceText = SyntaxTree(compilationUnit, context.ParseOptions, encoding: Encoding.UTF8).GetText();
-            context.AddSource($"{descriptor.Name}.g.cs", sourceText);
+            context.AddSource(GetHintName(descriptor), sourceText);
         }
 
         PrimitiveDescriptor? GetDescriptor(StructDeclarationSyntax @struct)
@@ -231,6 +231,9 @@ public class PrimitiveGenerator : ISourceGenerator
             yield return descriptor.IConvertibleConvertToSyntax(SyntaxKind.ULongKeyword, "ToUInt64");
         }
     }
+
+    static string GetHintName(PrimitiveDescriptor descriptor) =>
+        $"{(descriptor.NamespaceName is not "<global namespace>" ? descriptor.NamespaceName + '.' : "")}{descriptor.Name}.g.cs";
 
     class SyntaxReceiver : ISyntaxReceiver
     {
