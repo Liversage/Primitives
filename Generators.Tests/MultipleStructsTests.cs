@@ -8,14 +8,17 @@ public class MultipleStructsTests : TestsBase
     [Fact]
     public void Test()
     {
-        const string source = @"using Liversage.Primitives;
+        const string source =
+            """
+            using Liversage.Primitives;
 
-namespace Generated;
+            namespace Generated;
 
-[Primitive]
-public readonly partial struct A { readonly int value; }
-[Primitive]
-public readonly partial struct B { readonly int value; }";
+            [Primitive]
+            public readonly partial struct A { readonly int value; }
+            [Primitive]
+            public readonly partial struct B { readonly int value; }
+            """;
         var inputCompilation = CreateCompilation(source);
 
         var generator = new PrimitiveGenerator();
@@ -31,7 +34,7 @@ public readonly partial struct B { readonly int value; }";
         Assert.Equal(2, generatorResult.GeneratedSources.Length);
         var generatedSourceA = generatorResult.GeneratedSources[0];
         var generatedSourceB = generatorResult.GeneratedSources[1];
-        Assert.Equal("A.g.cs", generatedSourceA.HintName);
-        Assert.Equal("B.g.cs", generatedSourceB.HintName);
+        Assert.Equal("Generated.A.g.cs", generatedSourceA.HintName);
+        Assert.Equal("Generated.B.g.cs", generatedSourceB.HintName);
     }
 }
